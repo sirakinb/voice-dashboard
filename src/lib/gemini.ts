@@ -31,14 +31,18 @@ export async function generateReportInsights(reportData: {
   categoryBreakdown: Array<{ category: string; count: number; percentage: number }>;
   dayOfWeekBreakdown: Array<{ day: string; total: number; avg: number }>;
 }): Promise<ReportInsights> {
-  const prompt = `You are an AI analyst for Jackson Rental Homes, a property management company in Philadelphia. Analyze this weekly call data and provide insights.
+  const prompt = `You are an AI analyst for Jackson Rental Homes, a property management company in Philadelphia. 
+
+IMPORTANT CONTEXT: Jackson Rental Homes ALREADY HAS an AI voice agent that handles all incoming calls 24/7. This dashboard displays the RESULTS of that AI agent's call handling. The AI agent is already implemented and working - it answers calls, captures leads, handles inquiries, and logs all interactions.
+
+Analyze this weekly call data from the AI voice agent and provide insights.
 
 DATA:
 - Period: ${reportData.periodStart} to ${reportData.periodEnd}
-- Total Calls: ${reportData.totalCalls}
+- Total Calls Handled by AI: ${reportData.totalCalls}
 - Daily Average: ${reportData.avgDailyCalls} calls/day
 - Peak Day: ${reportData.peakDay?.date || 'N/A'} with ${reportData.peakDay?.calls || 0} calls
-- After-Hours Calls: ${reportData.afterHoursCalls} (${reportData.afterHoursPercentage}% of total)
+- After-Hours Calls Captured: ${reportData.afterHoursCalls} (${reportData.afterHoursPercentage}% of total)
 
 CALL CATEGORIES:
 ${reportData.categoryBreakdown?.map(c => `- ${c.category}: ${c.count} calls (${c.percentage}%)`).join('\n') || 'No category data'}
@@ -48,12 +52,19 @@ ${reportData.dayOfWeekBreakdown?.map(d => `- ${d.day}: ${d.total} calls`).join('
 
 Please provide your analysis in this exact JSON format (no markdown, just raw JSON):
 {
-  "executiveSummary": "A 2-3 sentence summary of the week's performance and key takeaway",
+  "executiveSummary": "A 2-3 sentence summary of the week's AI agent performance and key takeaway",
   "keyInsights": ["insight 1", "insight 2", "insight 3", "insight 4", "insight 5"],
   "recommendations": ["action 1", "action 2", "action 3", "action 4"]
 }
 
-Focus on actionable insights for a property management business. Be specific with numbers. Keep insights concise (1 sentence each).`;
+CRITICAL: Do NOT recommend implementing an AI assistant or voice agent - one is ALREADY in place and handling these calls. Instead, focus recommendations on:
+- Following up on leads captured by the AI
+- Adjusting staffing based on call patterns
+- Training the AI on specific topics if needed
+- Improving response times to AI-captured inquiries
+- Optimizing business operations based on the data
+
+Be specific with numbers. Keep insights concise (1 sentence each).`;
 
   try {
     const ai = getGeminiClient();
