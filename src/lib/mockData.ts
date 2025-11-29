@@ -1,3 +1,4 @@
+// Call record type definition
 export type CallRecord = {
   callNumber: string;
   createdTime: string;
