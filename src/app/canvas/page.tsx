@@ -87,7 +87,7 @@ export default function CanvasPage() {
                 key={example}
                 className="rounded-full bg-jackson-cream px-3 py-1.5 text-xs text-jackson-charcoal"
               >
-                "{example}"
+                &quot;{example}&quot;
               </span>
             ))}
           </div>

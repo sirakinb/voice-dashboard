@@ -400,7 +400,7 @@ Answer concisely (2-3 sentences max).`;
           </button>
         </div>
         <p className="mt-1.5 text-center text-[10px] text-jackson-text-muted">
-          Try: "chart calls by day" or "draft a summary"
+          Try: &quot;chart calls by day&quot; or &quot;draft a summary&quot;
         </p>
       </form>
     </div>
