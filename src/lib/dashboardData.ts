@@ -100,25 +100,30 @@ export async function getDashboardData(): Promise<DashboardData> {
 
   const [dailyRes, hourlyRes, currentWindowRes, previousWindowRes] =
     await Promise.all([
-      supabase.from<DailyMetricsRow>("daily_call_metrics").select(),
+      supabase.from("daily_call_metrics").select().returns<DailyMetricsRow[]>(),
       supabase
-        .from<{
-          hour_ts: string;
-          hour_label: string;
-          total_calls: number;
-          ai_calls: number;
-        }>("hourly_call_metrics")
-        .select(),
+        .from("hourly_call_metrics")
+        .select()
+        .returns<
+          {
+            hour_ts: string;
+            hour_label: string;
+            total_calls: number;
+            ai_calls: number;
+          }[]
+        >(),
       supabase
-        .from<CallEventRow>("call_events")
+        .from("call_events")
         .select("could_ai_answer, callback_requested")
         .gte("created_time", currentStart.toISOString())
-        .lt("created_time", now.toISOString()),
+        .lt("created_time", now.toISOString())
+        .returns<CallEventRow[]>(),
       supabase
-        .from<CallEventRow>("call_events")
+        .from("call_events")
         .select("could_ai_answer, callback_requested")
         .gte("created_time", previousStart.toISOString())
-        .lt("created_time", currentStart.toISOString()),
+        .lt("created_time", currentStart.toISOString())
+        .returns<CallEventRow[]>(),
     ]);
 
   if (dailyRes.error || hourlyRes.error || currentWindowRes.error || previousWindowRes.error) {

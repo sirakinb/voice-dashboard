@@ -7,7 +7,7 @@ export type CallRecord = {
   transcriptPreview: string;
   callSummary: string;
   callbackRequired: "Yes" | "No";
-  aiCouldHandle: "Yes" | "No";
+  aiCouldHandle: "Yes" | "No" | "Partial";
   recordingUrl?: string;
 };
 

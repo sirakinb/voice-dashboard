@@ -106,6 +106,8 @@ export function PerformanceReport() {
     }
 
     async function fetchReport() {
+      if (!selectedWeek) return;
+      
       setLoading(true);
       setError(null);
       setAiInsights(null);
