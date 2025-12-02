@@ -8,6 +8,7 @@ import { DataChat } from "./data-chat";
 import { signOut } from "@/lib/supabase/auth";
 import { supabaseBrowserClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { useDemoMode } from "@/lib/demo-context";
 
 const navItems = [
   { label: "Voice Dashboard", href: "/" },
@@ -21,11 +22,12 @@ export function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { isDemoMode, toggleDemoMode } = useDemoMode();
 
   // Fetch user on mount
   useEffect(() => {
     const supabase = supabaseBrowserClient();
-    
+
     // Get initial user
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
@@ -46,9 +48,9 @@ export function Sidebar() {
   };
 
   // Get display name from user metadata or email
-  const displayName = user?.user_metadata?.full_name || 
-                      user?.email?.split("@")[0] || 
-                      "User";
+  const displayName = user?.user_metadata?.full_name ||
+    user?.email?.split("@")[0] ||
+    "User";
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -72,12 +74,12 @@ export function Sidebar() {
   }, []);
 
   return (
-    <aside className="hidden h-full w-72 flex-col overflow-y-auto border-r border-jackson-cream-dark bg-jackson-white lg:flex">
-      {/* Jackson Logo at Top */}
+    <aside className="hidden h-full w-72 flex-col overflow-y-auto border-r border-pentridge-purple-medium bg-pentridge-purple-dark lg:flex">
+      {/* Pentridge Logo at Top */}
       <div className="flex items-center px-6 py-6">
         <Image
-          src="/jackson_logo.png"
-          alt="Jackson Rental Homes"
+          src="/agentOS_logo.png"
+          alt="Pentridge"
           width={180}
           height={60}
           className="h-14 w-auto object-contain"
@@ -94,11 +96,10 @@ export function Sidebar() {
               <Link
                 key={item.label}
                 href={item.href}
-                className={`flex w-full items-center gap-3 rounded-xl px-5 py-3 text-left text-sm font-medium transition ${
-                  isActive
-                    ? "bg-jackson-charcoal text-white shadow-sm"
-                    : "text-jackson-charcoal hover:bg-jackson-cream"
-                }`}
+                className={`flex w-full items-center gap-3 rounded-xl px-5 py-3 text-left text-sm font-medium transition ${isActive
+                  ? "bg-pentridge-purple-accent text-white shadow-sm"
+                  : "text-pentridge-text hover:bg-pentridge-purple-medium"
+                  }`}
               >
                 {item.label}
               </Link>
@@ -112,18 +113,18 @@ export function Sidebar() {
         <div className="space-y-3">
           {/* AI Data Chat */}
           <DataChat />
-          
+
           {/* User Profile */}
           <div ref={menuRef} className="relative">
             <button
               type="button"
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="flex w-full items-center gap-3 rounded-xl border border-jackson-cream-dark bg-jackson-white px-4 py-3 text-left transition hover:border-jackson-green/30 hover:shadow-md"
+              className="flex w-full items-center gap-3 rounded-xl border border-pentridge-purple-medium bg-pentridge-purple-dark px-4 py-3 text-left transition hover:border-pentridge-purple-accent/30 hover:shadow-md"
               aria-haspopup="menu"
               aria-expanded={menuOpen}
             >
               {/* User Icon */}
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-jackson-green text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pentridge-purple-accent text-white">
                 <svg
                   className="h-5 w-5"
                   viewBox="0 0 20 20"
@@ -145,19 +146,18 @@ export function Sidebar() {
                   />
                 </svg>
               </div>
-              
+
               {/* User Name */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-jackson-charcoal truncate capitalize">
+                <p className="text-sm font-semibold text-pentridge-text truncate capitalize">
                   {displayName}
                 </p>
               </div>
 
               {/* Chevron */}
               <svg
-                className={`h-4 w-4 flex-shrink-0 text-jackson-text-muted transform transition ${
-                  menuOpen ? "rotate-180" : ""
-                }`}
+                className={`h-4 w-4 flex-shrink-0 text-pentridge-text-muted transform transition ${menuOpen ? "rotate-180" : ""
+                  }`}
                 viewBox="0 0 20 20"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -175,10 +175,10 @@ export function Sidebar() {
 
             {/* Dropdown Menu */}
             {menuOpen && (
-              <div className="absolute bottom-[calc(100%+8px)] left-0 right-0 z-10 min-w-[260px] rounded-2xl border border-jackson-charcoal bg-jackson-charcoal py-2 text-white shadow-2xl">
+              <div className="absolute bottom-[calc(100%+8px)] left-0 right-0 z-10 min-w-[260px] rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-darker py-2 text-white shadow-2xl">
                 {/* Account Header */}
                 <div className="px-4 py-3">
-                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-jackson-cream-dark/60">
+                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-pentridge-text-muted">
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
@@ -206,7 +206,44 @@ export function Sidebar() {
                   </p>
                 </div>
 
-                <div className="my-2 h-px bg-jackson-charcoal-light" />
+                <div className="my-2 h-px bg-pentridge-purple-medium" />
+
+                {/* Demo Mode Toggle */}
+                <div className="px-2 pb-1">
+                  <button
+                    type="button"
+                    onClick={toggleDemoMode}
+                    className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-pentridge-purple-medium"
+                  >
+                    <div className="flex items-center gap-3">
+                      <svg
+                        className="h-5 w-5 text-slate-300"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span>Demo Mode</span>
+                    </div>
+                    <div
+                      className={`h-5 w-9 rounded-full transition ${isDemoMode ? "bg-pentridge-purple-accent" : "bg-pentridge-purple-medium"
+                        }`}
+                    >
+                      <div
+                        className={`h-4 w-4 translate-y-0.5 rounded-full bg-white transition-transform ${isDemoMode ? "translate-x-4" : "translate-x-0.5"
+                          }`}
+                      />
+                    </div>
+                  </button>
+                </div>
+
+                <div className="my-2 h-px bg-pentridge-purple-medium" />
 
                 {/* Log out Button */}
                 <div className="px-2 pb-1">
@@ -214,7 +251,7 @@ export function Sidebar() {
                     type="button"
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-jackson-charcoal-light disabled:opacity-50"
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-pentridge-purple-medium disabled:opacity-50"
                   >
                     {isLoggingOut ? (
                       <svg

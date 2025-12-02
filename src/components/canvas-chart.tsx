@@ -8,30 +8,30 @@ type Props = {
 
 export function CanvasChart({ chart }: Props) {
   const { removeItem } = useCanvas();
-  
+
   const maxValue = Math.max(...chart.data.map((d) => d.value));
   const colors = [
-    "#2D5A4A", // jackson-green
-    "#3D7A5A",
-    "#4D9A6A",
-    "#5DBA7A",
-    "#6DDA8A",
-    "#7DFA9A",
+    "#7c3aed", // pentridge-purple-accent
+    "#6d28d9",
+    "#5b21b6",
+    "#4c1d95",
+    "#8b5cf6",
+    "#a78bfa",
   ];
 
   return (
-    <div className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-6 shadow-sm">
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <h3 className="font-semibold text-jackson-charcoal">{chart.title}</h3>
-          <p className="text-xs text-jackson-text-muted">
+          <h3 className="font-semibold text-pentridge-text">{chart.title}</h3>
+          <p className="text-xs text-pentridge-text-muted">
             {chart.createdAt.toLocaleString()}
           </p>
         </div>
         <button
           onClick={() => removeItem(chart.id)}
-          className="rounded-lg p-1.5 text-jackson-text-muted transition hover:bg-jackson-cream hover:text-jackson-charcoal"
+          className="rounded-lg p-1.5 text-pentridge-text-muted transition hover:bg-pentridge-purple-medium hover:text-pentridge-text"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -45,10 +45,10 @@ export function CanvasChart({ chart }: Props) {
           {chart.data.map((item, index) => (
             <div key={item.label} className="space-y-1">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-jackson-text">{item.label}</span>
-                <span className="font-medium text-jackson-charcoal">{item.value}</span>
+                <span className="text-pentridge-text">{item.label}</span>
+                <span className="font-medium text-pentridge-text">{item.value}</span>
               </div>
-              <div className="h-6 overflow-hidden rounded-full bg-jackson-cream">
+              <div className="h-6 overflow-hidden rounded-full bg-pentridge-purple-medium">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
@@ -74,13 +74,13 @@ export function CanvasChart({ chart }: Props) {
                   const angle = (percentage / 100) * 360;
                   const startAngle = currentAngle;
                   currentAngle += angle;
-                  
+
                   const x1 = 50 + 40 * Math.cos((startAngle * Math.PI) / 180);
                   const y1 = 50 + 40 * Math.sin((startAngle * Math.PI) / 180);
                   const x2 = 50 + 40 * Math.cos(((startAngle + angle) * Math.PI) / 180);
                   const y2 = 50 + 40 * Math.sin(((startAngle + angle) * Math.PI) / 180);
                   const largeArc = angle > 180 ? 1 : 0;
-                  
+
                   return (
                     <path
                       key={item.label}
@@ -99,8 +99,8 @@ export function CanvasChart({ chart }: Props) {
                   className="h-3 w-3 rounded-full"
                   style={{ backgroundColor: item.color || colors[index % colors.length] }}
                 />
-                <span className="text-jackson-text">{item.label}</span>
-                <span className="font-medium text-jackson-charcoal">({item.value})</span>
+                <span className="text-pentridge-text">{item.label}</span>
+                <span className="font-medium text-pentridge-text">({item.value})</span>
               </div>
             ))}
           </div>
@@ -118,28 +118,28 @@ export function CanvasChart({ chart }: Props) {
                 y1={30 + i * 25}
                 x2="390"
                 y2={30 + i * 25}
-                stroke="#E8E4DF"
+                stroke="#2d1b69"
                 strokeWidth="1"
               />
             ))}
-            
+
             {/* Area fill */}
             {chart.type === "area" && (
               <path
                 d={`
                   M 40 130
                   ${chart.data.map((item, index) => {
-                    const x = 40 + (index / (chart.data.length - 1)) * 350;
-                    const y = 130 - (item.value / maxValue) * 100;
-                    return `L ${x} ${y}`;
-                  }).join(" ")}
+                  const x = 40 + (index / (chart.data.length - 1)) * 350;
+                  const y = 130 - (item.value / maxValue) * 100;
+                  return `L ${x} ${y}`;
+                }).join(" ")}
                   L 390 130
                   Z
                 `}
                 fill="url(#areaGradient)"
               />
             )}
-            
+
             {/* Line */}
             <path
               d={chart.data.map((item, index) => {
@@ -148,34 +148,34 @@ export function CanvasChart({ chart }: Props) {
                 return `${index === 0 ? "M" : "L"} ${x} ${y}`;
               }).join(" ")}
               fill="none"
-              stroke="#2D5A4A"
+              stroke="#7c3aed"
               strokeWidth="2"
             />
-            
+
             {/* Points */}
             {chart.data.map((item, index) => {
               const x = 40 + (index / (chart.data.length - 1)) * 350;
               const y = 130 - (item.value / maxValue) * 100;
               return (
                 <g key={item.label}>
-                  <circle cx={x} cy={y} r="4" fill="#2D5A4A" />
+                  <circle cx={x} cy={y} r="4" fill="#7c3aed" />
                   <text
                     x={x}
                     y="145"
                     textAnchor="middle"
-                    className="fill-jackson-text-muted text-[8px]"
+                    className="fill-pentridge-text-muted text-[8px]"
                   >
                     {item.label}
                   </text>
                 </g>
               );
             })}
-            
+
             {/* Gradient definition */}
             <defs>
               <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2D5A4A" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#2D5A4A" stopOpacity="0.05" />
+                <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.05" />
               </linearGradient>
             </defs>
           </svg>

@@ -22,7 +22,7 @@ function LoginForm() {
 
     try {
       const result = await signInWithEmail(email);
-      
+
       if (result.error) {
         setMessage({
           type: "error",
@@ -49,8 +49,8 @@ function LoginForm() {
       {/* Mobile Logo */}
       <div className="mb-8 flex justify-center lg:hidden">
         <Image
-          src="/jackson_logo.png"
-          alt="Jackson Rental Homes"
+          src="/agentOS_logo.png"
+          alt="Pentridge"
           width={180}
           height={72}
           className="h-14 w-auto"
@@ -59,10 +59,10 @@ function LoginForm() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-jackson-charcoal">
+        <h2 className="text-2xl font-bold text-pentridge-text">
           Sign in to your account
         </h2>
-        <p className="mt-2 text-sm text-jackson-text-muted">
+        <p className="mt-2 text-sm text-pentridge-text-muted">
           Enter your email to receive a sign-in link
         </p>
       </div>
@@ -71,7 +71,7 @@ function LoginForm() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-jackson-charcoal"
+            className="block text-sm font-medium text-pentridge-text"
           >
             Email address
           </label>
@@ -84,17 +84,16 @@ function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
-            className="mt-2 block w-full rounded-xl border border-jackson-cream-dark bg-jackson-white px-4 py-3 text-jackson-charcoal placeholder-jackson-text-muted shadow-sm transition focus:border-jackson-green focus:outline-none focus:ring-2 focus:ring-jackson-green/20"
+            className="mt-2 block w-full rounded-xl border border-pentridge-purple-medium bg-pentridge-purple-dark px-4 py-3 text-pentridge-text placeholder-pentridge-text-muted shadow-sm transition focus:border-pentridge-purple-accent focus:outline-none focus:ring-2 focus:ring-pentridge-purple-accent/20"
           />
         </div>
 
         {message && (
           <div
-            className={`rounded-xl px-4 py-3 text-sm ${
-              message.type === "success"
-                ? "bg-jackson-green/10 text-jackson-green"
-                : "bg-red-50 text-red-600"
-            }`}
+            className={`rounded-xl px-4 py-3 text-sm ${message.type === "success"
+              ? "bg-pentridge-purple-accent/10 text-pentridge-purple-accent"
+              : "bg-rose-900/20 text-rose-400"
+              }`}
           >
             {message.text}
           </div>
@@ -103,7 +102,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={isLoading || !email.trim()}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-jackson-green px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-jackson-green-dark focus:outline-none focus:ring-2 focus:ring-jackson-green focus:ring-offset-2 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-pentridge-purple-accent px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-pentridge-purple-light focus:outline-none focus:ring-2 focus:ring-pentridge-purple-accent focus:ring-offset-2 disabled:opacity-50"
         >
           {isLoading ? (
             <>
@@ -149,47 +148,38 @@ function LoginForm() {
         </button>
       </form>
 
-      <p className="mt-8 text-center text-xs text-jackson-text-muted">
-        By signing in, you agree to our Terms of Service and Privacy Policy.
-      </p>
+
     </div>
   );
 }
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen bg-jackson-cream">
+    <div className="flex min-h-screen bg-pentridge-purple-darker">
       {/* Left Panel - Branding */}
-      <div className="hidden w-1/2 flex-col justify-between bg-jackson-charcoal p-12 lg:flex">
-        <div />
-        
+      <div className="hidden w-1/2 flex-col justify-center bg-pentridge-purple-dark p-12 lg:flex">
         <div className="space-y-6">
           <h1 className="text-4xl font-bold leading-tight text-white">
             Voice Dashboard
           </h1>
-          <p className="text-lg text-jackson-cream-dark">
-            Monitor leasing calls and resident support handled by your AI receptionist. 
+          <p className="text-lg text-pentridge-text-muted">
+            Monitor leasing calls and resident support handled by your AI receptionist.
             Get insights, track performance, and optimize your property management workflow.
           </p>
           <div className="flex items-center gap-4 pt-4">
-            <div className="flex items-center gap-2 rounded-full bg-jackson-green/20 px-4 py-2">
-              <div className="h-2 w-2 rounded-full bg-jackson-green" />
-              <span className="text-sm font-medium text-jackson-green">AI-Powered Analytics</span>
+            <div className="flex items-center gap-2 rounded-full bg-pentridge-purple-accent/20 px-4 py-2">
+              <div className="h-2 w-2 rounded-full bg-pentridge-purple-accent" />
+              <span className="text-sm font-medium text-pentridge-purple-accent">AI-Powered Analytics</span>
             </div>
-            <div className="flex items-center gap-2 rounded-full bg-jackson-cream/10 px-4 py-2">
-              <span className="text-sm font-medium text-jackson-cream-dark">Real-time Data</span>
+            <div className="flex items-center gap-2 rounded-full bg-pentridge-purple-medium/10 px-4 py-2">
+              <span className="text-sm font-medium text-pentridge-text-muted">Real-time Data</span>
             </div>
           </div>
         </div>
-
-        <p className="text-sm text-jackson-cream-dark/60">
-          © {new Date().getFullYear()} Jackson Rental Homes LLC. All rights reserved.
-        </p>
       </div>
 
-      {/* Right Panel - Login Form */}
       <div className="flex w-full flex-col items-center justify-center px-8 lg:w-1/2 lg:px-16">
-        <Suspense fallback={<div className="text-jackson-text-muted">Loading login form...</div>}>
+        <Suspense fallback={<div className="text-pentridge-text-muted">Loading login form...</div>}>
           <LoginForm />
         </Suspense>
       </div>
