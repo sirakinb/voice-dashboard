@@ -18,7 +18,10 @@ export const metadata: Metadata = {
   title: "Jackson Rental Homes Voice Dashboard",
   description: "Voice analytics for Jackson Rental Homes connected to Zoho.",
   icons: {
-    icon: "/jackson_favicon.png",
+    icon: [
+      { url: "/jackson_favicon.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
     shortcut: "/jackson_favicon.png",
     apple: "/jackson_favicon.png",
   },
