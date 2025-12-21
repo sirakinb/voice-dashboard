@@ -10,7 +10,7 @@ import { supabaseBrowserClient } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
 const navItems = [
-  { label: "Voice Dashboard", href: "/" },
+  { label: "Dashboard", href: "/" },
   { label: "Performance Report", href: "/reports" },
   { label: "Data Canvas", href: "/canvas" },
 ];

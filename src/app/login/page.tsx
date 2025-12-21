@@ -149,9 +149,6 @@ function LoginForm() {
         </button>
       </form>
 
-      <p className="mt-8 text-center text-xs text-jackson-text-muted">
-        By signing in, you agree to our Terms of Service and Privacy Policy.
-      </p>
     </div>
   );
 }
@@ -165,7 +162,7 @@ export default function LoginPage() {
         
         <div className="space-y-6">
           <h1 className="text-4xl font-bold leading-tight text-white">
-            Voice Dashboard
+            Jackson Rental Homes Dashboard
           </h1>
           <p className="text-lg text-jackson-cream-dark">
             Monitor leasing calls and resident support handled by your AI receptionist. 
@@ -182,9 +179,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="text-sm text-jackson-cream-dark/60">
-          © {new Date().getFullYear()} Jackson Rental Homes LLC. All rights reserved.
-        </p>
+        <div />
       </div>
 
       {/* Right Panel - Login Form */}
