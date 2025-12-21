@@ -28,25 +28,25 @@ function detectChartRequest(message: string): { isChart: boolean; chartType: "ba
   const lower = message.toLowerCase();
   const chartKeywords = ["chart", "graph", "visualize", "visualization", "plot", "show me a"];
   const isChart = chartKeywords.some((kw) => lower.includes(kw));
-  
+
   if (lower.includes("pie")) return { isChart: true, chartType: "pie" };
   if (lower.includes("line") || lower.includes("trend")) return { isChart: true, chartType: "line" };
   if (lower.includes("area")) return { isChart: true, chartType: "area" };
   if (isChart) return { isChart: true, chartType: "bar" };
-  
+
   return { isChart: false, chartType: "bar" };
 }
 
 // Detect if user wants a draft
 function detectDraftRequest(message: string): { isDraft: boolean; draftType: "summary" | "report" | "analysis" | "list" } {
   const lower = message.toLowerCase();
-  
+
   if (lower.includes("summary") || lower.includes("summarize")) return { isDraft: true, draftType: "summary" };
   if (lower.includes("report") || lower.includes("create a report")) return { isDraft: true, draftType: "report" };
   if (lower.includes("analysis") || lower.includes("analyze")) return { isDraft: true, draftType: "analysis" };
   if (lower.includes("list") || lower.includes("bullet")) return { isDraft: true, draftType: "list" };
   if (lower.includes("draft") || lower.includes("write")) return { isDraft: true, draftType: "summary" };
-  
+
   return { isDraft: false, draftType: "summary" };
 }
 
@@ -66,11 +66,11 @@ export function DataChat() {
 
   async function fetchDataContext() {
     const supabase = supabaseBrowserClient();
-    
+
     const fourWeeksAgo = new Date();
     fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
     const today = new Date();
-    
+
     const { data: reportData } = await supabase.rpc("get_weekly_report", {
       p_start_date: fourWeeksAgo.toISOString().split("T")[0],
       p_end_date: today.toISOString().split("T")[0],
@@ -144,12 +144,12 @@ Respond with ONLY valid JSON in this format (no markdown, no explanation):
             title: chartData.title || "Chart",
             data: chartData.data,
           });
-          
+
           setMessages((prev) => [
             ...prev,
             { role: "assistant", content: `✨ Created a ${chartType} chart: "${chartData.title}". Check the Data Canvas tab to see it!` },
           ]);
-          
+
           // Navigate to canvas
           router.push("/canvas");
         } else {
@@ -160,7 +160,7 @@ Respond with ONLY valid JSON in this format (no markdown, no explanation):
         }
       } else if (isDraft) {
         // Generate draft content
-        const draftPrompt = `You are a business analyst for Jackson Rental Homes, a property management company. Create a ${draftType} based on this call data.
+        const draftPrompt = `You are a business analyst for Pentridge, a property management company. Create a ${draftType} based on this call data.
 
 DATA CONTEXT:
 - Period: Last 4 weeks
@@ -217,7 +217,7 @@ Respond with ONLY valid JSON (no markdown):
           .map((m) => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
           .join("\n");
 
-        const prompt = `You are a helpful AI assistant for Jackson Rental Homes. Answer questions about their call data.
+        const prompt = `You are a helpful AI assistant for Pentridge. Answer questions about their call data.
 
 DATA CONTEXT (Last 4 weeks):
 - Total Calls: ${dataContext?.totalCalls || 0}
@@ -272,15 +272,15 @@ Answer concisely (2-3 sentences max).`;
     <div className="flex flex-col">
       {/* Chat History - Expandable */}
       {(isExpanded || messages.length > 0) && (
-        <div className="mb-3 max-h-[300px] overflow-y-auto rounded-xl border border-jackson-cream-dark bg-jackson-white">
+        <div className="mb-3 max-h-[300px] overflow-y-auto rounded-xl border border-pentridge-purple-medium bg-pentridge-purple-dark">
           {/* Header */}
-          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-jackson-cream-dark bg-jackson-white px-3 py-2">
+          <div className="sticky top-0 z-10 flex items-center justify-between border-b border-pentridge-purple-medium bg-pentridge-purple-dark px-3 py-2">
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-jackson-green" />
-              <span className="text-xs font-medium text-jackson-charcoal">
+              <div className="h-2 w-2 rounded-full bg-pentridge-purple-accent" />
+              <span className="text-xs font-medium text-pentridge-text">
                 Data Assistant
               </span>
-              <span className="rounded bg-jackson-green/10 px-1.5 py-0.5 text-[10px] text-jackson-green">
+              <span className="rounded bg-pentridge-purple-accent/10 px-1.5 py-0.5 text-[10px] text-pentridge-purple-accent">
                 Gemini 3
               </span>
             </div>
@@ -289,7 +289,7 @@ Answer concisely (2-3 sentences max).`;
                 <button
                   type="button"
                   onClick={() => setMessages([])}
-                  className="text-[10px] text-jackson-text-muted hover:text-jackson-charcoal"
+                  className="text-[10px] text-pentridge-text-muted hover:text-pentridge-text"
                 >
                   Clear
                 </button>
@@ -297,7 +297,7 @@ Answer concisely (2-3 sentences max).`;
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="text-jackson-text-muted hover:text-jackson-charcoal"
+                className="text-pentridge-text-muted hover:text-pentridge-text"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -310,7 +310,7 @@ Answer concisely (2-3 sentences max).`;
           <div className="p-3">
             {messages.length === 0 ? (
               <div className="space-y-2 py-2">
-                <p className="text-center text-xs text-jackson-text-muted">
+                <p className="text-center text-xs text-pentridge-text-muted">
                   Ask questions or create visualizations
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -325,7 +325,7 @@ Answer concisely (2-3 sentences max).`;
                       onClick={() => {
                         if (inputRef.current) inputRef.current.value = suggestion;
                       }}
-                      className="rounded-full bg-jackson-cream px-2.5 py-1 text-[11px] text-jackson-charcoal transition hover:bg-jackson-cream-dark"
+                      className="rounded-full bg-pentridge-purple-medium px-2.5 py-1 text-[11px] text-pentridge-text transition hover:bg-pentridge-purple-light"
                     >
                       {suggestion}
                     </button>
@@ -337,16 +337,14 @@ Answer concisely (2-3 sentences max).`;
                 {messages.map((message, index) => (
                   <div
                     key={index}
-                    className={`flex ${
-                      message.role === "user" ? "justify-end" : "justify-start"
-                    }`}
+                    className={`flex ${message.role === "user" ? "justify-end" : "justify-start"
+                      }`}
                   >
                     <div
-                      className={`max-w-[90%] rounded-xl px-3 py-2 text-xs leading-relaxed ${
-                        message.role === "user"
-                          ? "bg-jackson-charcoal text-white"
-                          : "bg-jackson-cream text-jackson-text"
-                      }`}
+                      className={`max-w-[90%] rounded-xl px-3 py-2 text-xs leading-relaxed ${message.role === "user"
+                          ? "bg-pentridge-purple-light text-white"
+                          : "bg-pentridge-purple-medium text-pentridge-text"
+                        }`}
                     >
                       {message.content}
                     </div>
@@ -354,11 +352,11 @@ Answer concisely (2-3 sentences max).`;
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="rounded-xl bg-jackson-cream px-3 py-2">
+                    <div className="rounded-xl bg-pentridge-purple-medium px-3 py-2">
                       <div className="flex items-center gap-1">
-                        <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-jackson-green" />
-                        <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-jackson-green [animation-delay:0.1s]" />
-                        <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-jackson-green [animation-delay:0.2s]" />
+                        <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-pentridge-purple-accent" />
+                        <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-pentridge-purple-accent [animation-delay:0.1s]" />
+                        <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-pentridge-purple-accent [animation-delay:0.2s]" />
                       </div>
                     </div>
                   </div>
@@ -372,7 +370,7 @@ Answer concisely (2-3 sentences max).`;
 
       {/* Composer Input */}
       <form onSubmit={handleSubmit} className="relative">
-        <div className="flex items-end gap-2 rounded-xl border border-jackson-cream-dark bg-jackson-white p-2 shadow-sm transition-all focus-within:border-jackson-green focus-within:ring-1 focus-within:ring-jackson-green">
+        <div className="flex items-end gap-2 rounded-xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-2 shadow-sm transition-all focus-within:border-pentridge-purple-accent focus-within:ring-1 focus-within:ring-pentridge-purple-accent">
           <textarea
             ref={inputRef}
             onKeyDown={handleKeyDown}
@@ -380,12 +378,12 @@ Answer concisely (2-3 sentences max).`;
             placeholder="Ask or create charts..."
             disabled={isLoading}
             rows={1}
-            className="max-h-[120px] min-h-[36px] flex-1 resize-none bg-transparent px-2 py-1.5 text-sm text-jackson-charcoal placeholder-jackson-text-muted focus:outline-none disabled:opacity-50"
+            className="max-h-[120px] min-h-[36px] flex-1 resize-none bg-transparent px-2 py-1.5 text-sm text-pentridge-text placeholder-pentridge-text-muted focus:outline-none disabled:opacity-50"
           />
           <button
             type="submit"
             disabled={isLoading}
-            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-jackson-green text-white transition hover:bg-jackson-green-dark disabled:opacity-40"
+            className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-pentridge-purple-accent text-white transition hover:bg-pentridge-purple-light disabled:opacity-40"
           >
             {isLoading ? (
               <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
@@ -399,7 +397,7 @@ Answer concisely (2-3 sentences max).`;
             )}
           </button>
         </div>
-        <p className="mt-1.5 text-center text-[10px] text-jackson-text-muted">
+        <p className="mt-1.5 text-center text-[10px] text-pentridge-text-muted">
           Try: &quot;chart calls by day&quot; or &quot;draft a summary&quot;
         </p>
       </form>

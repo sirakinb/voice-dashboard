@@ -22,7 +22,7 @@ function LoginForm() {
 
     try {
       const result = await signInWithEmail(email);
-      
+
       if (result.error) {
         setMessage({
           type: "error",
@@ -49,8 +49,8 @@ function LoginForm() {
       {/* Mobile Logo */}
       <div className="mb-8 flex justify-center lg:hidden">
         <Image
-          src="/jackson_logo.png"
-          alt="Jackson Rental Homes"
+          src="/agentOS_logo.png"
+          alt="Pentridge"
           width={180}
           height={72}
           className="h-14 w-auto"
@@ -59,10 +59,10 @@ function LoginForm() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-jackson-charcoal">
+        <h2 className="text-2xl font-bold text-pentridge-text">
           Sign in to your account
         </h2>
-        <p className="mt-2 text-sm text-jackson-text-muted">
+        <p className="mt-2 text-sm text-pentridge-text-muted">
           Enter your email to receive a sign-in link
         </p>
       </div>
@@ -71,7 +71,7 @@ function LoginForm() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-jackson-charcoal"
+            className="block text-sm font-medium text-pentridge-text"
           >
             Email address
           </label>
@@ -84,17 +84,16 @@ function LoginForm() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@company.com"
-            className="mt-2 block w-full rounded-xl border border-jackson-cream-dark bg-jackson-white px-4 py-3 text-jackson-charcoal placeholder-jackson-text-muted shadow-sm transition focus:border-jackson-green focus:outline-none focus:ring-2 focus:ring-jackson-green/20"
+            className="mt-2 block w-full rounded-xl border border-pentridge-purple-medium bg-pentridge-purple-dark px-4 py-3 text-pentridge-text placeholder-pentridge-text-muted shadow-sm transition focus:border-pentridge-purple-accent focus:outline-none focus:ring-2 focus:ring-pentridge-purple-accent/20"
           />
         </div>
 
         {message && (
           <div
-            className={`rounded-xl px-4 py-3 text-sm ${
-              message.type === "success"
-                ? "bg-jackson-green/10 text-jackson-green"
-                : "bg-red-50 text-red-600"
-            }`}
+            className={`rounded-xl px-4 py-3 text-sm ${message.type === "success"
+              ? "bg-pentridge-purple-accent/10 text-pentridge-purple-accent"
+              : "bg-rose-900/20 text-rose-400"
+              }`}
           >
             {message.text}
           </div>
@@ -103,7 +102,7 @@ function LoginForm() {
         <button
           type="submit"
           disabled={isLoading || !email.trim()}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-jackson-green px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-jackson-green-dark focus:outline-none focus:ring-2 focus:ring-jackson-green focus:ring-offset-2 disabled:opacity-50"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-pentridge-purple-accent px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-pentridge-purple-light focus:outline-none focus:ring-2 focus:ring-pentridge-purple-accent focus:ring-offset-2 disabled:opacity-50"
         >
           {isLoading ? (
             <>

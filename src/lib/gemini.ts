@@ -31,9 +31,9 @@ export async function generateReportInsights(reportData: {
   categoryBreakdown: Array<{ category: string; count: number; percentage: number }>;
   dayOfWeekBreakdown: Array<{ day: string; total: number; avg: number }>;
 }): Promise<ReportInsights> {
-  const prompt = `You are an AI analyst for Jackson Rental Homes, a property management company in Philadelphia. 
+  const prompt = `You are an AI analyst for Pentridge, a property management company. 
 
-IMPORTANT CONTEXT: Jackson Rental Homes ALREADY HAS an AI voice agent that handles all incoming calls 24/7. This dashboard displays the RESULTS of that AI agent's call handling. The AI agent is already implemented and working - it answers calls, captures leads, handles inquiries, and logs all interactions.
+IMPORTANT CONTEXT: Pentridge ALREADY HAS an AI voice agent that handles all incoming calls 24/7. This dashboard displays the RESULTS of that AI agent's call handling. The AI agent is already implemented and working - it answers calls, captures leads, handles inquiries, and logs all interactions.
 
 Analyze this weekly call data from the AI voice agent and provide insights.
 
@@ -74,7 +74,7 @@ Be specific with numbers. Keep insights concise (1 sentence each).`;
     });
 
     const text = response.text || "";
-    
+
     // Clean up the response - remove markdown code blocks if present
     let cleanedText = text.trim();
     if (cleanedText.startsWith("```json")) {
@@ -88,7 +88,7 @@ Be specific with numbers. Keep insights concise (1 sentence each).`;
     cleanedText = cleanedText.trim();
 
     const parsed = JSON.parse(cleanedText);
-    
+
     return {
       executiveSummary: parsed.executiveSummary || "Report analysis unavailable.",
       keyInsights: parsed.keyInsights || [],

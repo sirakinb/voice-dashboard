@@ -1,6 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { useDemoMode } from "./demo-context";
+import { demoCanvasCharts, demoCanvasDrafts } from "./demo-data";
 
 export type ChartDataPoint = {
   label: string;
@@ -24,7 +26,7 @@ export type CanvasDraft = {
   createdAt: Date;
 };
 
-export type CanvasItem = 
+export type CanvasItem =
   | { kind: "chart"; item: CanvasChart }
   | { kind: "draft"; item: CanvasDraft };
 
@@ -40,6 +42,35 @@ const CanvasContext = createContext<CanvasContextType | null>(null);
 
 export function CanvasProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CanvasItem[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const { isDemoMode } = useDemoMode();
+
+  // Initialize with demo data if in demo mode
+  useEffect(() => {
+    if (!isInitialized) {
+      if (isDemoMode) {
+        const demoItems: CanvasItem[] = [
+          ...demoCanvasCharts.map((chart) => ({ kind: "chart" as const, item: chart })),
+          ...demoCanvasDrafts.map((draft) => ({ kind: "draft" as const, item: draft })),
+        ];
+        setItems(demoItems);
+      }
+      setIsInitialized(true);
+    }
+  }, [isDemoMode, isInitialized]);
+
+  // Clear canvas when toggling out of demo mode
+  useEffect(() => {
+    if (isInitialized && !isDemoMode) {
+      setItems([]);
+    } else if (isInitialized && isDemoMode) {
+      const demoItems: CanvasItem[] = [
+        ...demoCanvasCharts.map((chart) => ({ kind: "chart" as const, item: chart })),
+        ...demoCanvasDrafts.map((draft) => ({ kind: "draft" as const, item: draft })),
+      ];
+      setItems(demoItems);
+    }
+  }, [isDemoMode, isInitialized]);
 
   const addChart = (chart: Omit<CanvasChart, "id" | "createdAt">) => {
     const newChart: CanvasChart = {

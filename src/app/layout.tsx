@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CanvasProvider } from "@/lib/canvas-context";
+import { DemoProvider } from "@/lib/demo-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jackson Rental Homes Voice Dashboard",
-  description: "Voice analytics for Jackson Rental Homes connected to Zoho.",
+  title: "Pentridge Voice Dashboard",
+  description: "Voice analytics for Pentridge connected to Airtable.",
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
@@ -33,7 +34,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CanvasProvider>{children}</CanvasProvider>
+        <DemoProvider>
+          <CanvasProvider>{children}</CanvasProvider>
+        </DemoProvider>
       </body>
     </html>
   );
