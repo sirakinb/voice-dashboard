@@ -15,12 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pentridge Voice Dashboard",
-  description: "Voice analytics for Pentridge connected to Airtable.",
+  title: "Jackson Rental Homes Voice Dashboard",
+  description: "Voice analytics for Jackson Rental Homes connected to Zoho.",
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/jackson_favicon.png",
+    shortcut: "/jackson_favicon.png",
+    apple: "/jackson_favicon.png",
   },
 };
 

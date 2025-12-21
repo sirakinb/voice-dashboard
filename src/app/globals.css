@@ -1,23 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  /* Pentridge Color Palette */
-  --pentridge-purple-darker: #120a2e;
-  /* Deep background */
-  --pentridge-purple-dark: #1e1245;
-  /* Card background */
-  --pentridge-purple-medium: #2d1b69;
-  /* Lighter elements */
-  --pentridge-purple-light: #4c2a9e;
-  /* Accents */
-  --pentridge-purple-accent: #7c3aed;
-  /* Bright accent */
-  --pentridge-white: #FFFFFF;
-  --pentridge-text: #FFFFFF;
-  --pentridge-text-muted: #a78bfa;
+  /* Jackson Rental Homes Color Palette */
+  --jackson-green: #0D6B5E;
+  --jackson-green-light: #0F8571;
+  --jackson-green-dark: #095248;
+  --jackson-charcoal: #1A3A4A;
+  --jackson-charcoal-light: #2D4A5A;
+  --jackson-cream: #FAF9F6;
+  --jackson-cream-dark: #F0EDE8;
+  --jackson-white: #FFFFFF;
+  --jackson-text: #2D2D2D;
+  --jackson-text-muted: #6B7280;
 
-  --background: var(--pentridge-purple-darker);
-  --foreground: var(--pentridge-text);
+  --background: var(--jackson-cream);
+  --foreground: var(--jackson-text);
 }
 
 @theme inline {
@@ -26,15 +23,17 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Pentridge custom colors for Tailwind */
-  --color-pentridge-purple-darker: #120a2e;
-  --color-pentridge-purple-dark: #1e1245;
-  --color-pentridge-purple-medium: #2d1b69;
-  --color-pentridge-purple-light: #4c2a9e;
-  --color-pentridge-purple-accent: #7c3aed;
-  --color-pentridge-white: #FFFFFF;
-  --color-pentridge-text: #FFFFFF;
-  --color-pentridge-text-muted: #a78bfa;
+  /* Jackson custom colors for Tailwind */
+  --color-jackson-green: #0D6B5E;
+  --color-jackson-green-light: #0F8571;
+  --color-jackson-green-dark: #095248;
+  --color-jackson-charcoal: #1A3A4A;
+  --color-jackson-charcoal-light: #2D4A5A;
+  --color-jackson-cream: #FAF9F6;
+  --color-jackson-cream-dark: #F0EDE8;
+  --color-jackson-white: #FFFFFF;
+  --color-jackson-text: #2D2D2D;
+  --color-jackson-text-muted: #6B7280;
 }
 
 body {
@@ -44,22 +43,22 @@ body {
     "Segoe UI", sans-serif;
 }
 
-/* Custom scrollbar for Pentridge theme */
+/* Custom scrollbar for Jackson theme */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--pentridge-purple-dark);
+  background: var(--jackson-cream-dark);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--pentridge-purple-light);
+  background: var(--jackson-charcoal-light);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--pentridge-purple-accent);
+  background: var(--jackson-green);
 }
