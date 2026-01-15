@@ -156,7 +156,7 @@ export function Sidebar() {
 
               {/* Chevron */}
               <svg
-                className={`h-4 w-4 flex-shrink-0 text-jackson-charcoal-muted transform transition ${menuOpen ? "rotate-180" : ""
+                className={`h-4 w-4 flex-shrink-0 text-jackson-text-muted transform transition ${menuOpen ? "rotate-180" : ""
                   }`}
                 viewBox="0 0 20 20"
                 fill="none"
@@ -175,10 +175,10 @@ export function Sidebar() {
 
             {/* Dropdown Menu */}
             {menuOpen && (
-              <div className="absolute bottom-[calc(100%+8px)] left-0 right-0 z-10 min-w-[260px] rounded-2xl border border-jackson-cream-dark bg-jackson-cream py-2 text-white shadow-2xl">
+              <div className="absolute bottom-[calc(100%+8px)] left-0 right-0 z-10 min-w-[260px] rounded-2xl border border-jackson-cream-dark bg-jackson-white py-2 text-jackson-charcoal shadow-2xl">
                 {/* Account Header */}
                 <div className="px-4 py-3">
-                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-jackson-charcoal-muted">
+                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-jackson-text-muted">
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
@@ -201,7 +201,7 @@ export function Sidebar() {
                     </svg>
                     Account
                   </div>
-                  <p className="mt-2 break-all text-sm font-medium text-white">
+                  <p className="mt-2 break-all text-sm font-medium text-jackson-charcoal">
                     {user?.email || "Not signed in"}
                   </p>
                 </div>
@@ -213,11 +213,11 @@ export function Sidebar() {
                   <button
                     type="button"
                     onClick={toggleDemoMode}
-                    className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-jackson-cream-dark"
+                    className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-jackson-charcoal transition hover:bg-jackson-cream"
                   >
                     <div className="flex items-center gap-3">
                       <svg
-                        className="h-5 w-5 text-slate-300"
+                        className="h-5 w-5 text-jackson-text-muted"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -251,11 +251,11 @@ export function Sidebar() {
                     type="button"
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-jackson-cream-dark disabled:opacity-50"
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-jackson-charcoal transition hover:bg-jackson-cream disabled:opacity-50"
                   >
                     {isLoggingOut ? (
                       <svg
-                        className="h-5 w-5 animate-spin text-slate-300"
+                        className="h-5 w-5 animate-spin text-jackson-text-muted"
                         viewBox="0 0 24 24"
                         fill="none"
                       >
@@ -275,7 +275,7 @@ export function Sidebar() {
                       </svg>
                     ) : (
                       <svg
-                        className="h-5 w-5 text-slate-300"
+                        className="h-5 w-5 text-jackson-text-muted"
                         viewBox="0 0 20 20"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -303,7 +303,7 @@ export function Sidebar() {
                         />
                       </svg>
                     )}
-                    <span>{isLoggingOut ? "Signing out..." : "Log out"}</span>
+                    <span className="text-jackson-charcoal">{isLoggingOut ? "Signing out..." : "Log out"}</span>
                   </button>
                 </div>
               </div>
