@@ -74,12 +74,12 @@ export function Sidebar() {
   }, []);
 
   return (
-    <aside className="hidden h-full w-72 flex-col overflow-y-auto border-r border-pentridge-purple-medium bg-pentridge-purple-dark lg:flex">
-      {/* Pentridge Logo at Top */}
+    <aside className="hidden h-full w-72 flex-col overflow-y-auto border-r border-jackson-cream-dark bg-jackson-white lg:flex">
+      {/* Jackson Logo at Top */}
       <div className="flex items-center px-6 py-6">
         <Image
-          src="/agentOS_logo.png"
-          alt="Pentridge"
+          src="/jackson_logo.png"
+          alt="Jackson Rental Homes"
           width={180}
           height={60}
           className="h-14 w-auto object-contain"
@@ -97,8 +97,8 @@ export function Sidebar() {
                 key={item.label}
                 href={item.href}
                 className={`flex w-full items-center gap-3 rounded-xl px-5 py-3 text-left text-sm font-medium transition ${isActive
-                  ? "bg-pentridge-purple-accent text-white shadow-sm"
-                  : "text-pentridge-text hover:bg-pentridge-purple-medium"
+                  ? "bg-jackson-green text-white shadow-sm"
+                  : "text-jackson-charcoal hover:bg-jackson-cream-dark"
                   }`}
               >
                 {item.label}
@@ -119,12 +119,12 @@ export function Sidebar() {
             <button
               type="button"
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="flex w-full items-center gap-3 rounded-xl border border-pentridge-purple-medium bg-pentridge-purple-dark px-4 py-3 text-left transition hover:border-pentridge-purple-accent/30 hover:shadow-md"
+              className="flex w-full items-center gap-3 rounded-xl border border-jackson-cream-dark bg-jackson-white px-4 py-3 text-left transition hover:border-jackson-green/30 hover:shadow-md"
               aria-haspopup="menu"
               aria-expanded={menuOpen}
             >
               {/* User Icon */}
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pentridge-purple-accent text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-jackson-green text-white">
                 <svg
                   className="h-5 w-5"
                   viewBox="0 0 20 20"
@@ -149,14 +149,14 @@ export function Sidebar() {
 
               {/* User Name */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-pentridge-text truncate capitalize">
+                <p className="text-sm font-semibold text-jackson-charcoal truncate capitalize">
                   {displayName}
                 </p>
               </div>
 
               {/* Chevron */}
               <svg
-                className={`h-4 w-4 flex-shrink-0 text-pentridge-text-muted transform transition ${menuOpen ? "rotate-180" : ""
+                className={`h-4 w-4 flex-shrink-0 text-jackson-charcoal-muted transform transition ${menuOpen ? "rotate-180" : ""
                   }`}
                 viewBox="0 0 20 20"
                 fill="none"
@@ -175,10 +175,10 @@ export function Sidebar() {
 
             {/* Dropdown Menu */}
             {menuOpen && (
-              <div className="absolute bottom-[calc(100%+8px)] left-0 right-0 z-10 min-w-[260px] rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-darker py-2 text-white shadow-2xl">
+              <div className="absolute bottom-[calc(100%+8px)] left-0 right-0 z-10 min-w-[260px] rounded-2xl border border-jackson-cream-dark bg-jackson-cream py-2 text-white shadow-2xl">
                 {/* Account Header */}
                 <div className="px-4 py-3">
-                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-pentridge-text-muted">
+                  <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-jackson-charcoal-muted">
                     <svg
                       className="h-4 w-4"
                       viewBox="0 0 20 20"
@@ -206,14 +206,14 @@ export function Sidebar() {
                   </p>
                 </div>
 
-                <div className="my-2 h-px bg-pentridge-purple-medium" />
+                <div className="my-2 h-px bg-jackson-cream-dark" />
 
                 {/* Demo Mode Toggle */}
                 <div className="px-2 pb-1">
                   <button
                     type="button"
                     onClick={toggleDemoMode}
-                    className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-pentridge-purple-medium"
+                    className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-jackson-cream-dark"
                   >
                     <div className="flex items-center gap-3">
                       <svg
@@ -232,7 +232,7 @@ export function Sidebar() {
                       <span>Demo Mode</span>
                     </div>
                     <div
-                      className={`h-5 w-9 rounded-full transition ${isDemoMode ? "bg-pentridge-purple-accent" : "bg-pentridge-purple-medium"
+                      className={`h-5 w-9 rounded-full transition ${isDemoMode ? "bg-jackson-green" : "bg-jackson-cream-dark"
                         }`}
                     >
                       <div
@@ -243,7 +243,7 @@ export function Sidebar() {
                   </button>
                 </div>
 
-                <div className="my-2 h-px bg-pentridge-purple-medium" />
+                <div className="my-2 h-px bg-jackson-cream-dark" />
 
                 {/* Log out Button */}
                 <div className="px-2 pb-1">
@@ -251,7 +251,7 @@ export function Sidebar() {
                     type="button"
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-pentridge-purple-medium disabled:opacity-50"
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-white transition hover:bg-jackson-cream-dark disabled:opacity-50"
                   >
                     {isLoggingOut ? (
                       <svg

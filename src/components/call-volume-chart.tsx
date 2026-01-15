@@ -32,7 +32,7 @@ function formatTimeLabel(label: string): string {
 export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
   if (data.length === 0) {
     return (
-      <div className="flex h-56 items-center justify-center rounded-xl border border-dashed border-pentridge-purple-accent/20 bg-pentridge-purple-darker text-sm text-pentridge-text-muted">
+      <div className="flex h-56 items-center justify-center rounded-xl border border-dashed border-jackson-green/20 bg-jackson-cream text-sm text-jackson-text-muted">
         No call activity for this timeframe yet.
       </div>
     );
@@ -96,12 +96,12 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
 
   return (
     <div className={`${containerHeight} relative overflow-x-auto`}>
-      <div className="pointer-events-none absolute right-4 top-4 flex gap-4 text-xs font-medium text-pentridge-text">
+      <div className="pointer-events-none absolute right-4 top-4 flex gap-4 text-xs font-medium text-jackson-charcoal">
         <span className="inline-flex items-center gap-1.5">
           <span
             aria-hidden
             className="h-2.5 w-2.5 rounded-full"
-            style={{ backgroundColor: "#7c3aed" }}
+            style={{ backgroundColor: "#0D6B5E" }}
           />
           Total Calls
         </span>
@@ -109,7 +109,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
           <span
             aria-hidden
             className="h-2.5 w-2.5 rounded-full"
-            style={{ backgroundColor: "#4c2a9e" }}
+            style={{ backgroundColor: "#0F8571" }}
           />
           Resolved by AI
         </span>
@@ -128,8 +128,8 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
             y1="0"
             y2="1"
           >
-            <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#2d1b69" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#0D6B5E" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#1A3A4A" stopOpacity="0.1" />
           </linearGradient>
         </defs>
 
@@ -141,7 +141,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
             x2={totalWidth - padding.right}
             y1={getY(tick)}
             y2={getY(tick)}
-            stroke="#2d1b69"
+            stroke="#1A3A4A"
             strokeWidth={1}
             strokeDasharray={tick === 0 ? "0" : "4,4"}
           />
@@ -155,7 +155,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
             y={getY(tick)}
             textAnchor="end"
             dominantBaseline="middle"
-            fill="#a78bfa"
+            fill="#6B7280"
             fontSize="12"
             fontWeight="500"
           >
@@ -188,7 +188,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
         <polyline
           points={buildLine("totalCalls")}
           fill="none"
-          stroke="#7c3aed"
+          stroke="#0D6B5E"
           strokeWidth={2.5}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -198,7 +198,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
         <polyline
           points={linePoints}
           fill="none"
-          stroke="#4c2a9e"
+          stroke="#0F8571"
           strokeWidth={2.5}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -220,7 +220,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
                   x2={x}
                   y1={padding.top}
                   y2={padding.top + chartHeight}
-                  stroke="#2d1b69"
+                  stroke="#1A3A4A"
                   strokeWidth={1}
                 />
               )}
@@ -229,7 +229,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
                 cx={x}
                 cy={totalY}
                 r={4}
-                fill="#7c3aed"
+                fill="#0D6B5E"
                 stroke="#FFFFFF"
                 strokeWidth={2}
               />
@@ -238,7 +238,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
                 cx={x}
                 cy={aiY}
                 r={4}
-                fill="#4c2a9e"
+                fill="#0F8571"
                 stroke="#FFFFFF"
                 strokeWidth={2}
               />
@@ -248,7 +248,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
                   x={x}
                   y={padding.top + chartHeight + 20}
                   textAnchor={needsRotation ? "end" : "middle"}
-                  fill="#a78bfa"
+                  fill="#6B7280"
                   fontSize="11"
                   fontWeight="500"
                   transform={needsRotation ? `rotate(-45, ${x}, ${padding.top + chartHeight + 20})` : undefined}
@@ -266,7 +266,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
           x2={totalWidth - padding.right}
           y1={padding.top + chartHeight}
           y2={padding.top + chartHeight}
-          stroke="#4c2a9e"
+          stroke="#0F8571"
           strokeWidth={1}
         />
       </svg>

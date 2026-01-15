@@ -35,20 +35,20 @@ export function CallVolumePanel({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-semibold text-pentridge-text">
+          <h2 className="text-lg font-semibold text-jackson-charcoal">
             Call Volume Over Time
           </h2>
-          <p className="text-sm text-pentridge-text-muted">
-            Track how frequently calls are coming into Pentridge.
+          <p className="text-sm text-jackson-text-muted">
+            Track how frequently calls are coming into Jackson Rental Homes.
           </p>
         </div>
-        <div className="flex items-center gap-1 rounded-full bg-pentridge-purple-medium p-1 text-sm font-medium text-pentridge-text-muted">
+        <div className="flex items-center gap-1 rounded-full bg-jackson-cream-dark p-1 text-sm font-medium text-jackson-text-muted">
           {(["Hourly", "Daily", "Weekly", "Monthly"] as const).map((item) => (
             <button
               key={item}
               className={`rounded-full px-3 py-1.5 transition-all ${item === timeframe
-                  ? "bg-pentridge-purple-dark text-pentridge-text shadow-sm"
-                  : "hover:text-pentridge-text"
+                  ? "bg-jackson-charcoal text-white shadow-sm"
+                  : "hover:text-jackson-charcoal"
                 }`}
               type="button"
               onClick={() => setTimeframe(item)}

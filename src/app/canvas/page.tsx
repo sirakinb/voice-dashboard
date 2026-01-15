@@ -45,7 +45,7 @@ export default function CanvasPage() {
                 {items.length > 0 && (
                   <button
                     onClick={clearCanvas}
-                    className="rounded-lg border border-pentridge-purple-medium px-4 py-2 text-sm font-medium text-pentridge-text-muted transition hover:bg-pentridge-purple-medium hover:text-pentridge-text"
+                    className="rounded-lg border border-jackson-cream-dark px-4 py-2 text-sm font-medium text-jackson-text-muted transition hover:bg-jackson-cream hover:text-jackson-charcoal"
                   >
                     Clear Canvas
                   </button>
@@ -54,10 +54,10 @@ export default function CanvasPage() {
 
               {/* Canvas Content */}
               {items.length === 0 ? (
-                <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-pentridge-purple-medium bg-pentridge-purple-dark/50 p-12">
-                  <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-pentridge-purple-medium">
+                <div className="flex min-h-[60vh] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-jackson-cream-dark bg-jackson-white/50 p-12">
+                  <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-jackson-cream">
                     <svg
-                      className="h-10 w-10 text-pentridge-purple-accent"
+                      className="h-10 w-10 text-jackson-green"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -70,10 +70,10 @@ export default function CanvasPage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="mb-2 text-lg font-semibold text-pentridge-text">
+                  <h3 className="mb-2 text-lg font-semibold text-jackson-charcoal">
                     Your canvas is empty
                   </h3>
-                  <p className="mb-6 max-w-md text-center text-sm text-pentridge-text-muted">
+                  <p className="mb-6 max-w-md text-center text-sm text-jackson-text-muted">
                     Use the chat to generate visualizations and drafts. Try commands like:
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
@@ -85,7 +85,7 @@ export default function CanvasPage() {
                     ].map((example) => (
                       <span
                         key={example}
-                        className="rounded-full bg-pentridge-purple-medium px-3 py-1.5 text-xs text-pentridge-text"
+                        className="rounded-full bg-jackson-cream px-3 py-1.5 text-xs text-jackson-charcoal"
                       >
                         &quot;{example}&quot;
                       </span>

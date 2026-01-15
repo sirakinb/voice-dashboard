@@ -176,7 +176,7 @@ export function PerformanceReport() {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="text-pentridge-text-muted">Loading report...</div>
+        <div className="text-jackson-charcoal-muted">Loading report...</div>
       </div>
     );
   }
@@ -194,8 +194,8 @@ export function PerformanceReport() {
 
   if (!report || availableWeeks.length === 0) {
     return (
-      <div className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-8 text-center">
-        <p className="text-pentridge-text-muted">
+      <div className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-8 text-center">
+        <p className="text-jackson-charcoal-muted">
           No call data available yet. Reports will appear here once calls are
           recorded.
         </p>
@@ -210,7 +210,7 @@ export function PerformanceReport() {
         <div className="flex items-center gap-3">
           <label
             htmlFor="week-select"
-            className="text-sm font-medium text-pentridge-text"
+            className="text-sm font-medium text-jackson-charcoal"
           >
             Report Period:
           </label>
@@ -223,7 +223,7 @@ export function PerformanceReport() {
               );
               if (week) setSelectedWeek(week);
             }}
-            className="rounded-lg border border-pentridge-purple-medium bg-pentridge-purple-dark px-4 py-2 text-sm font-medium text-pentridge-text shadow-sm focus:border-pentridge-purple-accent focus:outline-none focus:ring-1 focus:ring-pentridge-purple-accent"
+            className="rounded-lg border border-jackson-cream-dark bg-jackson-white px-4 py-2 text-sm font-medium text-jackson-charcoal shadow-sm focus:border-jackson-green focus:outline-none focus:ring-1 focus:ring-jackson-green"
           >
             {availableWeeks.map((week) => (
               <option key={week.weekStart} value={week.weekStart}>
@@ -233,7 +233,7 @@ export function PerformanceReport() {
           </select>
         </div>
         {aiLoading && (
-          <div className="flex items-center gap-2 text-sm text-pentridge-purple-accent">
+          <div className="flex items-center gap-2 text-sm text-jackson-green">
             <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -244,11 +244,11 @@ export function PerformanceReport() {
       </div>
 
       {/* At-A-Glance Metrics */}
-      <section className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-pentridge-text">
+      <section className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-jackson-charcoal">
           At-A-Glance Performance
         </h2>
-        <p className="mt-1 text-sm text-pentridge-text-muted">
+        <p className="mt-1 text-sm text-jackson-charcoal-muted">
           {formatDate(report.periodStart)} - {formatDate(report.periodEnd)}
         </p>
 
@@ -286,19 +286,19 @@ export function PerformanceReport() {
       </section>
 
       {/* AI Executive Summary */}
-      <section className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-6 shadow-sm">
+      <section className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-6 shadow-sm">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-pentridge-text">
+          <h2 className="text-lg font-semibold text-jackson-charcoal">
             Executive Summary
           </h2>
-          <span className="rounded-full bg-pentridge-purple-accent/10 px-2 py-0.5 text-xs font-medium text-pentridge-purple-accent">
+          <span className="rounded-full bg-jackson-green/10 px-2 py-0.5 text-xs font-medium text-jackson-green">
             AI Generated
           </span>
         </div>
         {aiLoading ? (
-          <div className="mt-4 h-16 animate-pulse rounded-lg bg-pentridge-purple-medium" />
+          <div className="mt-4 h-16 animate-pulse rounded-lg bg-jackson-cream-dark" />
         ) : (
-          <p className="mt-4 text-sm leading-relaxed text-pentridge-text">
+          <p className="mt-4 text-sm leading-relaxed text-jackson-charcoal">
             {aiInsights?.executiveSummary ||
               `Your AI voice agent handled ${report.totalCalls.toLocaleString()} calls this week.`}
           </p>
@@ -308,11 +308,11 @@ export function PerformanceReport() {
       {/* Two Column Layout */}
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Category Breakdown */}
-        <section className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-pentridge-text">
+        <section className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-jackson-charcoal">
             Call Categories
           </h2>
-          <p className="mt-1 text-sm text-pentridge-text-muted">
+          <p className="mt-1 text-sm text-jackson-charcoal-muted">
             What callers are asking about
           </p>
 
@@ -320,16 +320,16 @@ export function PerformanceReport() {
             {report.categoryBreakdown?.map((cat) => (
               <div key={cat.category}>
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium text-pentridge-text">
+                  <span className="font-medium text-jackson-charcoal">
                     {cat.category}
                   </span>
-                  <span className="text-pentridge-text-muted">
+                  <span className="text-jackson-charcoal-muted">
                     {cat.count} ({cat.percentage}%)
                   </span>
                 </div>
-                <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-pentridge-purple-medium">
+                <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-jackson-cream-dark">
                   <div
-                    className="h-full rounded-full bg-pentridge-purple-accent transition-all"
+                    className="h-full rounded-full bg-jackson-green transition-all"
                     style={{ width: `${Math.min(cat.percentage, 100)}%` }}
                   />
                 </div>
@@ -339,11 +339,11 @@ export function PerformanceReport() {
         </section>
 
         {/* Day of Week Breakdown */}
-        <section className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-pentridge-text">
+        <section className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-jackson-charcoal">
             Call Volume by Day
           </h2>
-          <p className="mt-1 text-sm text-pentridge-text-muted">
+          <p className="mt-1 text-sm text-jackson-charcoal-muted">
             When calls are coming in
           </p>
 
@@ -356,16 +356,16 @@ export function PerformanceReport() {
               return (
                 <div key={day.day}>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-pentridge-text">
+                    <span className="font-medium text-jackson-charcoal">
                       {day.day}
                     </span>
-                    <span className="text-pentridge-text-muted">
+                    <span className="text-jackson-charcoal-muted">
                       {day.total} calls
                     </span>
                   </div>
-                  <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-pentridge-purple-medium">
+                  <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-jackson-cream-dark">
                     <div
-                      className="h-full rounded-full bg-pentridge-purple-light transition-all"
+                      className="h-full rounded-full bg-jackson-green transition-all"
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
@@ -377,29 +377,29 @@ export function PerformanceReport() {
       </div>
 
       {/* AI Key Insights */}
-      <section className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-6 shadow-sm">
+      <section className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-6 shadow-sm">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-pentridge-text">
+          <h2 className="text-lg font-semibold text-jackson-charcoal">
             Key Insights
           </h2>
-          <span className="rounded-full bg-pentridge-purple-accent/10 px-2 py-0.5 text-xs font-medium text-pentridge-purple-accent">
+          <span className="rounded-full bg-jackson-green/10 px-2 py-0.5 text-xs font-medium text-jackson-green">
             AI Generated
           </span>
         </div>
         {aiLoading ? (
           <div className="mt-4 space-y-3">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-8 animate-pulse rounded-lg bg-pentridge-purple-medium" />
+              <div key={i} className="h-8 animate-pulse rounded-lg bg-jackson-cream-dark" />
             ))}
           </div>
         ) : (
           <ul className="mt-4 space-y-3">
             {(aiInsights?.keyInsights || []).map((insight, index) => (
               <li key={index} className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-pentridge-purple-accent/10 text-xs font-medium text-pentridge-purple-accent">
+                <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-jackson-green/10 text-xs font-medium text-jackson-green">
                   {index + 1}
                 </span>
-                <span className="text-sm text-pentridge-text">{insight}</span>
+                <span className="text-sm text-jackson-charcoal">{insight}</span>
               </li>
             ))}
           </ul>
@@ -407,26 +407,26 @@ export function PerformanceReport() {
       </section>
 
       {/* AI Recommendations */}
-      <section className="rounded-2xl border border-pentridge-purple-accent/20 bg-pentridge-purple-accent/5 p-6 shadow-sm">
+      <section className="rounded-2xl border border-jackson-green/20 bg-jackson-green/5 p-6 shadow-sm">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-pentridge-text">
+          <h2 className="text-lg font-semibold text-jackson-charcoal">
             Recommended Actions
           </h2>
-          <span className="rounded-full bg-pentridge-purple-accent/10 px-2 py-0.5 text-xs font-medium text-pentridge-purple-accent">
+          <span className="rounded-full bg-jackson-green/10 px-2 py-0.5 text-xs font-medium text-jackson-green">
             AI Generated
           </span>
         </div>
         {aiLoading ? (
           <div className="mt-4 space-y-3">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-8 animate-pulse rounded-lg bg-pentridge-purple-accent/10" />
+              <div key={i} className="h-8 animate-pulse rounded-lg bg-jackson-green/10" />
             ))}
           </div>
         ) : (
           <ul className="mt-4 space-y-3">
             {(aiInsights?.recommendations || []).map((rec, index) => (
               <li key={index} className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-pentridge-purple-accent text-xs font-medium text-white">
+                <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-jackson-green text-xs font-medium text-white">
                   <svg
                     className="h-3 w-3"
                     fill="none"
@@ -441,7 +441,7 @@ export function PerformanceReport() {
                     />
                   </svg>
                 </span>
-                <span className="text-sm text-pentridge-text">{rec}</span>
+                <span className="text-sm text-jackson-charcoal">{rec}</span>
               </li>
             ))}
           </ul>
@@ -461,14 +461,14 @@ function MetricCard({
   subtitle: string;
 }) {
   return (
-    <div className="rounded-xl bg-pentridge-purple-medium p-4">
-      <p className="text-xs font-medium uppercase tracking-wide text-pentridge-text-muted">
+    <div className="rounded-xl bg-jackson-cream-dark p-4">
+      <p className="text-xs font-medium uppercase tracking-wide text-jackson-charcoal-muted">
         {label}
       </p>
-      <p className="mt-1 text-2xl font-semibold text-pentridge-text">
+      <p className="mt-1 text-2xl font-semibold text-jackson-charcoal">
         {value}
       </p>
-      <p className="mt-0.5 text-xs text-pentridge-text-muted">{subtitle}</p>
+      <p className="mt-0.5 text-xs text-jackson-charcoal-muted">{subtitle}</p>
     </div>
   );
 }

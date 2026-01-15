@@ -44,20 +44,20 @@ export function CanvasDraftCard({ draft }: Props) {
   };
 
   return (
-    <div className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-6 shadow-sm">
+    <div className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-6 shadow-sm">
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-pentridge-purple-medium text-pentridge-purple-accent">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-jackson-cream text-jackson-green">
             {typeIcons[draft.type]}
           </div>
           <div>
-            <h3 className="font-semibold text-pentridge-text">{draft.title}</h3>
+            <h3 className="font-semibold text-jackson-charcoal">{draft.title}</h3>
             <div className="flex items-center gap-2">
-              <span className="rounded bg-pentridge-purple-accent/10 px-1.5 py-0.5 text-[10px] font-medium uppercase text-pentridge-purple-accent">
+              <span className="rounded bg-jackson-green/10 px-1.5 py-0.5 text-[10px] font-medium uppercase text-jackson-green">
                 {typeLabels[draft.type]}
               </span>
-              <span className="text-xs text-pentridge-text-muted">
+              <span className="text-xs text-jackson-text-muted">
                 {draft.createdAt.toLocaleString()}
               </span>
             </div>
@@ -66,7 +66,7 @@ export function CanvasDraftCard({ draft }: Props) {
         <div className="flex items-center gap-1">
           <button
             onClick={copyToClipboard}
-            className="rounded-lg p-1.5 text-pentridge-text-muted transition hover:bg-pentridge-purple-medium hover:text-pentridge-text"
+            className="rounded-lg p-1.5 text-jackson-text-muted transition hover:bg-jackson-cream hover:text-jackson-charcoal"
             title="Copy to clipboard"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -75,7 +75,7 @@ export function CanvasDraftCard({ draft }: Props) {
           </button>
           <button
             onClick={() => removeItem(draft.id)}
-            className="rounded-lg p-1.5 text-pentridge-text-muted transition hover:bg-pentridge-purple-medium hover:text-pentridge-text"
+            className="rounded-lg p-1.5 text-jackson-text-muted transition hover:bg-jackson-cream hover:text-jackson-charcoal"
             title="Remove"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -86,7 +86,7 @@ export function CanvasDraftCard({ draft }: Props) {
       </div>
 
       {/* Content */}
-      <div className="prose prose-sm max-w-none text-pentridge-text">
+      <div className="prose prose-sm max-w-none text-jackson-charcoal">
         <div className="whitespace-pre-wrap text-sm leading-relaxed">
           {draft.content}
         </div>

@@ -11,7 +11,7 @@ export function CanvasChart({ chart }: Props) {
 
   const maxValue = Math.max(...chart.data.map((d) => d.value));
   const colors = [
-    "#7c3aed", // pentridge-purple-accent
+    "#0D6B5E", // jackson-green
     "#6d28d9",
     "#5b21b6",
     "#4c1d95",
@@ -20,18 +20,18 @@ export function CanvasChart({ chart }: Props) {
   ];
 
   return (
-    <div className="rounded-2xl border border-pentridge-purple-medium bg-pentridge-purple-dark p-6 shadow-sm">
+    <div className="rounded-2xl border border-jackson-cream-dark bg-jackson-white p-6 shadow-sm">
       {/* Header */}
       <div className="mb-4 flex items-start justify-between">
         <div>
-          <h3 className="font-semibold text-pentridge-text">{chart.title}</h3>
-          <p className="text-xs text-pentridge-text-muted">
+          <h3 className="font-semibold text-jackson-charcoal">{chart.title}</h3>
+          <p className="text-xs text-jackson-text-muted">
             {chart.createdAt.toLocaleString()}
           </p>
         </div>
         <button
           onClick={() => removeItem(chart.id)}
-          className="rounded-lg p-1.5 text-pentridge-text-muted transition hover:bg-pentridge-purple-medium hover:text-pentridge-text"
+          className="rounded-lg p-1.5 text-jackson-text-muted transition hover:bg-jackson-cream hover:text-jackson-charcoal"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -45,10 +45,10 @@ export function CanvasChart({ chart }: Props) {
           {chart.data.map((item, index) => (
             <div key={item.label} className="space-y-1">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-pentridge-text">{item.label}</span>
-                <span className="font-medium text-pentridge-text">{item.value}</span>
+                <span className="text-jackson-charcoal">{item.label}</span>
+                <span className="font-medium text-jackson-charcoal">{item.value}</span>
               </div>
-              <div className="h-6 overflow-hidden rounded-full bg-pentridge-purple-medium">
+              <div className="h-6 overflow-hidden rounded-full bg-jackson-cream">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
@@ -99,8 +99,8 @@ export function CanvasChart({ chart }: Props) {
                   className="h-3 w-3 rounded-full"
                   style={{ backgroundColor: item.color || colors[index % colors.length] }}
                 />
-                <span className="text-pentridge-text">{item.label}</span>
-                <span className="font-medium text-pentridge-text">({item.value})</span>
+                <span className="text-jackson-charcoal">{item.label}</span>
+                <span className="font-medium text-jackson-charcoal">({item.value})</span>
               </div>
             ))}
           </div>
@@ -118,7 +118,7 @@ export function CanvasChart({ chart }: Props) {
                 y1={30 + i * 25}
                 x2="390"
                 y2={30 + i * 25}
-                stroke="#2d1b69"
+                  stroke="#1A3A4A"
                 strokeWidth="1"
               />
             ))}
@@ -148,7 +148,7 @@ export function CanvasChart({ chart }: Props) {
                 return `${index === 0 ? "M" : "L"} ${x} ${y}`;
               }).join(" ")}
               fill="none"
-              stroke="#7c3aed"
+              stroke="#0D6B5E"
               strokeWidth="2"
             />
 
@@ -163,7 +163,7 @@ export function CanvasChart({ chart }: Props) {
                     x={x}
                     y="145"
                     textAnchor="middle"
-                    className="fill-pentridge-text-muted text-[8px]"
+                    className="fill-jackson-text-muted text-[8px]"
                   >
                     {item.label}
                   </text>
@@ -174,8 +174,8 @@ export function CanvasChart({ chart }: Props) {
             {/* Gradient definition */}
             <defs>
               <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.3" />
-                <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.05" />
+                <stop offset="0%" stopColor="#0D6B5E" stopOpacity="0.3" />
+                <stop offset="100%" stopColor="#0D6B5E" stopOpacity="0.05" />
               </linearGradient>
             </defs>
           </svg>
