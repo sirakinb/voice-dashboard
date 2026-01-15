@@ -124,13 +124,14 @@ export function CanvasChart({ chart }: Props) {
             ))}
 
             {/* Area fill */}
-            {chart.type === "area" && (
+            {chart.type === "area" && chart.data.length > 0 && (
               <path
                 d={`
                   M 40 130
                   ${chart.data.map((item, index) => {
-                  const x = 40 + (index / (chart.data.length - 1)) * 350;
-                  const y = 130 - (item.value / maxValue) * 100;
+                  const divisor = Math.max(chart.data.length - 1, 1);
+                  const x = 40 + (index / divisor) * 350;
+                  const y = maxValue > 0 ? 130 - (item.value / maxValue) * 100 : 130;
                   return `L ${x} ${y}`;
                 }).join(" ")}
                   L 390 130
@@ -141,21 +142,25 @@ export function CanvasChart({ chart }: Props) {
             )}
 
             {/* Line */}
-            <path
-              d={chart.data.map((item, index) => {
-                const x = 40 + (index / (chart.data.length - 1)) * 350;
-                const y = 130 - (item.value / maxValue) * 100;
-                return `${index === 0 ? "M" : "L"} ${x} ${y}`;
-              }).join(" ")}
-              fill="none"
-              stroke="#0D6B5E"
-              strokeWidth="2"
-            />
+            {chart.data.length > 0 && (
+              <path
+                d={chart.data.map((item, index) => {
+                  const divisor = Math.max(chart.data.length - 1, 1);
+                  const x = 40 + (index / divisor) * 350;
+                  const y = maxValue > 0 ? 130 - (item.value / maxValue) * 100 : 130;
+                  return `${index === 0 ? "M" : "L"} ${x} ${y}`;
+                }).join(" ")}
+                fill="none"
+                stroke="#0D6B5E"
+                strokeWidth="2"
+              />
+            )}
 
             {/* Points */}
             {chart.data.map((item, index) => {
-              const x = 40 + (index / (chart.data.length - 1)) * 350;
-              const y = 130 - (item.value / maxValue) * 100;
+              const divisor = Math.max(chart.data.length - 1, 1);
+              const x = 40 + (index / divisor) * 350;
+              const y = maxValue > 0 ? 130 - (item.value / maxValue) * 100 : 130;
               return (
                 <g key={item.label}>
                   <circle cx={x} cy={y} r="4" fill="#0D6B5E" />
