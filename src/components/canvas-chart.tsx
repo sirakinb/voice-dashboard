@@ -12,11 +12,11 @@ export function CanvasChart({ chart }: Props) {
   const maxValue = Math.max(...chart.data.map((d) => d.value));
   const colors = [
     "#0D6B5E", // jackson-green
-    "#6d28d9",
-    "#5b21b6",
-    "#4c1d95",
-    "#8b5cf6",
-    "#a78bfa",
+    "#0F8571", // jackson-green-light
+    "#095248", // jackson-green-dark
+    "#1A3A4A", // jackson-charcoal
+    "#2D4A5A", // jackson-charcoal-light
+    "#0D6B5E80", // jackson-green with opacity
   ];
 
   return (
@@ -158,7 +158,7 @@ export function CanvasChart({ chart }: Props) {
               const y = 130 - (item.value / maxValue) * 100;
               return (
                 <g key={item.label}>
-                  <circle cx={x} cy={y} r="4" fill="#7c3aed" />
+                  <circle cx={x} cy={y} r="4" fill="#0D6B5E" />
                   <text
                     x={x}
                     y="145"

@@ -45,10 +45,10 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
   const chartWidth = totalWidth - padding.left - padding.right;
   const chartHeight = totalHeight - padding.top - padding.bottom;
 
-  const maxDataValue = Math.max(...data.map((item) => item.totalCalls));
+  const maxDataValue = Math.max(...data.map((item) => item.totalCalls), 0);
   // Round up to a nice number for the Y-axis
-  const niceMax = Math.ceil(maxDataValue / 5) * 5 || 5;
-  const step = data.length > 1 ? chartWidth / (data.length - 1) : chartWidth;
+  const niceMax = Math.max(Math.ceil(maxDataValue / 5) * 5, 5);
+  const step = data.length > 1 ? chartWidth / (data.length - 1) : (data.length === 1 ? chartWidth / 2 : chartWidth);
 
   // Generate Y-axis tick values
   const yTickCount = 5;
@@ -74,21 +74,26 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
   const getY = (value: number) => padding.top + chartHeight - (value / niceMax) * chartHeight;
 
   const buildLine = (key: keyof CallVolumeDatum) => {
+    if (data.length === 0) return "";
     return data
       .map((item, index) => {
         const x = getX(index);
-        const value = item[key] as number;
+        const value = (item[key] as number) || 0;
         const y = getY(value);
-        return `${x},${y}`;
+        return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
       })
       .join(" ");
   };
 
-  const areaPoints = [
+  const areaPoints = data.length > 0 ? [
     `${padding.left},${padding.top + chartHeight}`,
-    buildLine("totalCalls"),
+    ...data.map((item, index) => {
+      const x = getX(index);
+      const y = getY(item.totalCalls);
+      return `${x},${y}`;
+    }),
     `${getX(data.length - 1)},${padding.top + chartHeight}`,
-  ].join(" ");
+  ].join(" ") : "";
 
   const linePoints = buildLine("aiHandled");
 
@@ -169,7 +174,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
           y={totalHeight / 2}
           textAnchor="middle"
           dominantBaseline="middle"
-          fill="#a78bfa"
+          fill="#6B7280"
           fontSize="11"
           fontWeight="500"
           transform={`rotate(-90, 16, ${totalHeight / 2})`}
@@ -178,11 +183,13 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
         </text>
 
         {/* Area fill for total calls */}
-        <polygon
-          points={areaPoints}
-          fill="url(#total-call-gradient)"
-          stroke="none"
-        />
+        {areaPoints && (
+          <polygon
+            points={areaPoints}
+            fill="url(#total-call-gradient)"
+            stroke="none"
+          />
+        )}
 
         {/* Total calls line */}
         <polyline
