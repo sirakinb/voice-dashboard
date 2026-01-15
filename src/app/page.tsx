@@ -8,22 +8,22 @@ export default async function Home() {
     await getDashboardData();
 
   return (
-    <div className="h-screen overflow-hidden bg-pentridge-purple-darker text-pentridge-text">
+    <div className="h-screen overflow-hidden bg-jackson-cream text-jackson-charcoal">
       <div className="flex h-full">
         <Sidebar />
         <div className="flex flex-1 flex-col overflow-hidden">
           <div className="lg:hidden">
-            <div className="flex items-center justify-between border-b border-pentridge-purple-medium bg-pentridge-purple-dark px-5 py-4">
+            <div className="flex items-center justify-between border-b border-jackson-cream-dark bg-jackson-white px-5 py-4">
               <Image
-                src="/agentOS_logo.png"
-                alt="Pentridge"
+                src="/jackson_logo.png"
+                alt="Jackson Rental Homes"
                 width={120}
                 height={40}
                 className="h-8 w-auto"
               />
-              <div className="flex items-center gap-2 rounded-full bg-pentridge-purple-accent/10 px-4 py-2 text-xs font-medium text-pentridge-purple-accent">
-                <span className="h-2 w-2 rounded-full bg-pentridge-purple-accent" aria-hidden />
-                Connected to Airtable CRM
+              <div className="flex items-center gap-2 rounded-full bg-jackson-green/10 px-4 py-2 text-xs font-medium text-jackson-green">
+                <span className="h-2 w-2 rounded-full bg-jackson-green" aria-hidden />
+                Connected to Zoho CRM
               </div>
             </div>
           </div>

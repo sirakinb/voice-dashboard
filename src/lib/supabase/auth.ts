@@ -8,7 +8,7 @@ export async function signInWithEmail(email: string) {
   
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.NODE_ENV === 'production' 
     ? 'https://voice-dashboard-snowy.vercel.app' 
-    : 'http://localhost:3030');
+    : 'http://localhost:3000');
   
   const redirectUrl = `${siteUrl}/auth/callback`;
   
