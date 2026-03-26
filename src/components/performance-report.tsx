@@ -405,48 +405,6 @@ export function PerformanceReport() {
           </ul>
         )}
       </section>
-
-      {/* AI Recommendations */}
-      <section className="rounded-2xl border border-jackson-green/20 bg-jackson-green/5 p-6 shadow-sm">
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-jackson-charcoal">
-            Recommended Actions
-          </h2>
-          <span className="rounded-full bg-jackson-green/10 px-2 py-0.5 text-xs font-medium text-jackson-green">
-            AI Generated
-          </span>
-        </div>
-        {aiLoading ? (
-          <div className="mt-4 space-y-3">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-8 animate-pulse rounded-lg bg-jackson-green/10" />
-            ))}
-          </div>
-        ) : (
-          <ul className="mt-4 space-y-3">
-            {(aiInsights?.recommendations || []).map((rec, index) => (
-              <li key={index} className="flex items-start gap-3">
-                <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-jackson-green text-xs font-medium text-white">
-                  <svg
-                    className="h-3 w-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </span>
-                <span className="text-sm text-jackson-charcoal">{rec}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
     </div>
   );
 }

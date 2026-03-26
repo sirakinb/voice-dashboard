@@ -23,6 +23,20 @@ function getGeminiClient(): GoogleGenAI {
   return aiClient;
 }
 
+/** Jackson already uses this app’s AI voice agent; never advise replacing or “adding” phone/IVR/staffing. */
+const PRODUCT_CONTEXT_RULES = `
+PRODUCT CONTEXT (non-negotiable):
+Jackson Rental Homes already uses an AI voice agent / intelligent IVR: it answers calls, handles routing, captures leads, and logs activity. This dashboard is the RESULT of that system.
+
+You MUST NOT recommend or suggest:
+- Staffing, shifts, or hiring people to cover phones
+- Adding, fixing, or upgrading IVRs, phone trees, auto-attendants, or “better call routing”
+- Extended hours, “answer around the clock,” or overnight phone coverage as something to implement
+- Integrating inventory, listings, CRM, or PMS “so callers get availability” as a project to start — frame as business follow-up on leads the AI already captured, not as missing telecom
+
+Stay grounded in the numbers and operational follow-up (e.g. leasing team callbacks, maintenance triage), not phone-system projects.
+`.trim();
+
 // Detect if user wants a visualization
 function detectChartRequest(message: string): { isChart: boolean; chartType: "bar" | "line" | "pie" | "area" } {
   const lower = message.toLowerCase();
@@ -115,6 +129,8 @@ ${dataContext?.dayOfWeekBreakdown?.map((d: { day: string; total: number }) => `-
 
 USER REQUEST: ${userMessage}
 
+${PRODUCT_CONTEXT_RULES}
+
 Respond with ONLY valid JSON in this format (no markdown, no explanation):
 {
   "title": "Short descriptive title",
@@ -177,6 +193,8 @@ ${dataContext?.dayOfWeekBreakdown?.map((d: { day: string; total: number; avg: nu
 
 USER REQUEST: ${userMessage}
 
+${PRODUCT_CONTEXT_RULES}
+
 Respond with ONLY valid JSON (no markdown):
 {
   "title": "Title for the ${draftType}",
@@ -234,6 +252,8 @@ ${dataContext?.dayOfWeekBreakdown?.map((d: { day: string; total: number; avg: nu
 ${conversationHistory ? `\nCONVERSATION:\n${conversationHistory}\n` : ""}
 
 QUESTION: ${userMessage}
+
+${PRODUCT_CONTEXT_RULES}
 
 TIP: If the user wants visualizations, suggest they say "show me a chart of..." or "create a report...".
 

@@ -17,7 +17,6 @@ function getGeminiClient(): GoogleGenAI {
 export type ReportInsights = {
   executiveSummary: string;
   keyInsights: string[];
-  recommendations: string[];
 };
 
 export async function generateReportInsights(reportData: {
@@ -53,16 +52,19 @@ ${reportData.dayOfWeekBreakdown?.map(d => `- ${d.day}: ${d.total} calls`).join('
 Please provide your analysis in this exact JSON format (no markdown, just raw JSON):
 {
   "executiveSummary": "A 2-3 sentence summary of the week's AI agent performance and key takeaway",
-  "keyInsights": ["insight 1", "insight 2", "insight 3", "insight 4", "insight 5"],
-  "recommendations": ["action 1", "action 2", "action 3", "action 4"]
+  "keyInsights": ["insight 1", "insight 2", "insight 3", "insight 4", "insight 5"]
 }
 
-CRITICAL: Do NOT recommend implementing an AI assistant or voice agent - one is ALREADY in place and handling these calls. Instead, focus recommendations on:
-- Following up on leads captured by the AI
-- Adjusting staffing based on call patterns
-- Training the AI on specific topics if needed
-- Improving response times to AI-captured inquiries
-- Optimizing business operations based on the data
+OUTPUT RULES — READ CAREFULLY:
+The AI voice agent / intelligent phone system IS this product. It already answers calls around the clock, routes callers, and captures leads. This report is about WHAT HAPPENED in the data, not about acquiring phone technology.
+
+NEVER write or imply recommendations about:
+- Staffing, scheduling, or hiring people to answer phones
+- IVRs, phone trees, auto-attendants, call routing, or "improving the phone system"
+- Being "available 24/7," extending hours, or adding overnight coverage (the AI already handles after-hours)
+- Connecting listings, inventory, CRM, or PMS systems "so callers can get availability" as if that were a missing project — treat that capability as already handled by the product where relevant
+
+DO write about: factual patterns in the data, categories and volumes, timing, lead follow-up by the property team (humans), maintenance urgency, marketing or operational takeaways grounded in numbers.
 
 Be specific with numbers. Keep insights concise (1 sentence each).`;
 
@@ -92,22 +94,16 @@ Be specific with numbers. Keep insights concise (1 sentence each).`;
     return {
       executiveSummary: parsed.executiveSummary || "Report analysis unavailable.",
       keyInsights: parsed.keyInsights || [],
-      recommendations: parsed.recommendations || [],
     };
   } catch (error) {
     console.error("Gemini API error:", error);
     // Return fallback insights if AI fails
     return {
-      executiveSummary: `Your AI voice agent handled ${reportData.totalCalls} calls this week with an average of ${reportData.avgDailyCalls} calls per day. After-hours coverage captured ${reportData.afterHoursCalls} calls (${reportData.afterHoursPercentage}%) that would have otherwise been missed.`,
+      executiveSummary: `Your AI voice agent handled ${reportData.totalCalls} calls this week with an average of ${reportData.avgDailyCalls} calls per day. ${reportData.afterHoursCalls} calls (${reportData.afterHoursPercentage}%) occurred in after-hours windows.`,
       keyInsights: [
         `${reportData.categoryBreakdown?.[0]?.category || 'Primary category'} inquiries represent ${reportData.categoryBreakdown?.[0]?.percentage || 0}% of all calls`,
         `After-hours calls account for ${reportData.afterHoursPercentage}% of total volume`,
         `Peak activity occurred on ${reportData.peakDay?.date || 'N/A'} with ${reportData.peakDay?.calls || 0} calls`,
-      ],
-      recommendations: [
-        "Review call transcripts to identify improvement opportunities",
-        "Follow up on showing requests within 24 hours",
-        "Track conversion rate from AI-captured leads to signed leases",
       ],
     };
   }

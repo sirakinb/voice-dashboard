@@ -39,8 +39,8 @@ export default function CanvasPage() {
             Data Canvas
           </h1>
           <p className="mt-1 text-sm text-jackson-text-muted">
-                    Visualizations and drafts generated from your chat queries
-                  </p>
+            Visualizations and drafts generated from your chat queries (last 30 days)
+          </p>
                 </div>
                 {items.length > 0 && (
                   <button

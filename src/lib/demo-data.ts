@@ -147,19 +147,13 @@ export const demoReportData: DemoReportData = {
 // Sample AI insights
 export const demoAIInsights = {
     executiveSummary:
-        "Your AI voice agent handled 127 calls this week with strong performance. After-hours coverage captured 42 calls (33%) that would have been missed, representing significant lead capture opportunity.",
+        "Your AI voice agent handled 127 calls this week with strong performance. 42 calls (33%) arrived in after-hours windows—useful for planning leasing and maintenance follow-up volume.",
     keyInsights: [
         "Property inquiries represent 38% of all calls, indicating strong market interest",
-        "After-hours calls account for 33% of total volume, validating 24/7 AI coverage",
+        "After-hours calls account for 33% of total volume, concentrated outside typical office hours",
         "Peak activity occurred on Wednesday with 24 calls",
         "Maintenance requests increased 15% compared to previous week",
         "Average call duration of 4.2 minutes shows thorough AI engagement",
-    ],
-    recommendations: [
-        "Follow up on 48 property inquiry leads within 24 hours to maximize conversion",
-        "Review maintenance request patterns to identify potential property issues",
-        "Consider staffing adjustments based on Wednesday peak call volume",
-        "Analyze after-hours inquiries for patterns in prospect availability",
     ],
 };
 
@@ -215,7 +209,7 @@ export const demoCanvasDrafts = [
         content: `This week showed strong AI performance with 127 total calls handled. Key highlights:
 
 • 38% of calls were property inquiries, showing healthy market interest
-• 33% after-hours coverage prevented missed opportunities
+• 33% of calls arrived after hours—note follow-up workload for the leasing team
 • Wednesday was the peak day with 24 calls
 • Average response quality maintained at 95%
 
@@ -240,7 +234,7 @@ Top Categories:
 2. Maintenance Requests: 12 calls
 3. General Questions: 12 calls
 
-Impact: Without 24/7 AI coverage, these 42 calls would have gone to voicemail, representing potential lost revenue and customer satisfaction issues.`,
+These calls were handled during after-hours windows; volume and categories above are useful for prioritizing leasing and maintenance follow-up.`,
         createdAt: new Date("2025-12-02T14:30:00"),
     },
 ];
