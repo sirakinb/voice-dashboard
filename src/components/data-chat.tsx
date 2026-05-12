@@ -3,39 +3,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseBrowserClient } from "@/lib/supabase/client";
-import { GoogleGenAI } from "@google/genai";
+import { generateDataChatResponse } from "@/lib/data-chat-actions";
 import { useCanvas } from "@/lib/canvas-context";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
 };
-
-// Lazy Gemini client
-let aiClient: GoogleGenAI | null = null;
-function getGeminiClient(): GoogleGenAI {
-  if (!aiClient) {
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-    console.log("Gemini API key exists:", !!apiKey);
-    if (!apiKey) throw new Error("Gemini API key not set");
-    aiClient = new GoogleGenAI({ apiKey });
-  }
-  return aiClient;
-}
-
-/** Jackson already uses this app’s AI voice agent; never advise replacing or “adding” phone/IVR/staffing. */
-const PRODUCT_CONTEXT_RULES = `
-PRODUCT CONTEXT (non-negotiable):
-Jackson Rental Homes already uses an AI voice agent / intelligent IVR: it answers calls, handles routing, captures leads, and logs activity. This dashboard is the RESULT of that system.
-
-You MUST NOT recommend or suggest:
-- Staffing, shifts, or hiring people to cover phones
-- Adding, fixing, or upgrading IVRs, phone trees, auto-attendants, or “better call routing”
-- Extended hours, “answer around the clock,” or overnight phone coverage as something to implement
-- Integrating inventory, listings, CRM, or PMS “so callers get availability” as a project to start — frame as business follow-up on leads the AI already captured, not as missing telecom
-
-Stay grounded in the numbers and operational follow-up (e.g. leasing team callbacks, maintenance triage), not phone-system projects.
-`.trim();
 
 // Detect if user wants a visualization
 function detectChartRequest(message: string): { isChart: boolean; chartType: "bar" | "line" | "pie" | "area" } {
@@ -110,51 +84,14 @@ export function DataChat() {
       const { isChart, chartType } = detectChartRequest(userMessage);
       const { isDraft, draftType } = detectDraftRequest(userMessage);
 
-      const ai = getGeminiClient();
-
       if (isChart) {
-        // Generate chart data
-        const chartPrompt = `You are a data analyst. Based on this call data, generate chart data for the user's request.
-
-DATA CONTEXT:
-- Total Calls: ${dataContext?.totalCalls || 0}
-- Daily Average: ${dataContext?.avgDailyCalls || 0}
-- After-Hours: ${dataContext?.afterHoursCalls || 0} (${dataContext?.afterHoursPercentage || 0}%)
-
-CALL CATEGORIES:
-${dataContext?.categoryBreakdown?.map((c: { category: string; count: number }) => `- ${c.category}: ${c.count}`).join("\n") || "No data"}
-
-CALLS BY DAY:
-${dataContext?.dayOfWeekBreakdown?.map((d: { day: string; total: number }) => `- ${d.day}: ${d.total}`).join("\n") || "No data"}
-
-USER REQUEST: ${userMessage}
-
-${PRODUCT_CONTEXT_RULES}
-
-Respond with ONLY valid JSON in this format (no markdown, no explanation):
-{
-  "title": "Short descriptive title",
-  "data": [
-    {"label": "Label1", "value": 123},
-    {"label": "Label2", "value": 456}
-  ]
-}`;
-
-        const response = await ai.models.generateContent({
-          model: "gemini-3-pro-preview",
-          contents: chartPrompt,
+        const chartData = await generateDataChatResponse({
+          kind: "chart",
+          userMessage,
+          dataContext,
         });
 
-        let chartData;
-        try {
-          let jsonText = response.text || "{}";
-          jsonText = jsonText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-          chartData = JSON.parse(jsonText);
-        } catch {
-          chartData = { title: "Call Data", data: [] };
-        }
-
-        if (chartData.data && chartData.data.length > 0) {
+        if (chartData.kind === "chart" && chartData.data.length > 0) {
           addChart({
             type: chartType,
             title: chartData.title || "Chart",
@@ -175,44 +112,15 @@ Respond with ONLY valid JSON in this format (no markdown, no explanation):
           ]);
         }
       } else if (isDraft) {
-        // Generate draft content
-        const draftPrompt = `You are a business analyst for Jackson Rental Homes, a property management company. Create a ${draftType} based on this call data.
-
-DATA CONTEXT:
-- Period: Last 4 weeks
-- Total Calls: ${dataContext?.totalCalls || 0}
-- Daily Average: ${dataContext?.avgDailyCalls || 0} calls/day
-- After-Hours: ${dataContext?.afterHoursCalls || 0} (${dataContext?.afterHoursPercentage || 0}%)
-- Peak Day: ${dataContext?.peakDay?.date || "N/A"} (${dataContext?.peakDay?.calls || 0} calls)
-
-CALL CATEGORIES:
-${dataContext?.categoryBreakdown?.map((c: { category: string; count: number; percentage: number }) => `- ${c.category}: ${c.count} (${c.percentage}%)`).join("\n") || "No data"}
-
-CALLS BY DAY OF WEEK:
-${dataContext?.dayOfWeekBreakdown?.map((d: { day: string; total: number; avg: number }) => `- ${d.day}: ${d.total} total (${d.avg}/day avg)`).join("\n") || "No data"}
-
-USER REQUEST: ${userMessage}
-
-${PRODUCT_CONTEXT_RULES}
-
-Respond with ONLY valid JSON (no markdown):
-{
-  "title": "Title for the ${draftType}",
-  "content": "The full ${draftType} content here. Use \\n for line breaks."
-}`;
-
-        const response = await ai.models.generateContent({
-          model: "gemini-3-pro-preview",
-          contents: draftPrompt,
+        const draftData = await generateDataChatResponse({
+          kind: "draft",
+          draftType,
+          userMessage,
+          dataContext,
         });
 
-        let draftData;
-        try {
-          let jsonText = response.text || "{}";
-          jsonText = jsonText.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
-          draftData = JSON.parse(jsonText);
-        } catch {
-          draftData = { title: "Draft", content: response.text || "Could not generate content." };
+        if (draftData.kind !== "draft") {
+          throw new Error("Unexpected AI draft response");
         }
 
         addDraft({
@@ -229,44 +137,20 @@ Respond with ONLY valid JSON (no markdown):
         // Navigate to canvas
         router.push("/canvas");
       } else {
-        // Regular Q&A
-        const conversationHistory = messages
-          .slice(-6)
-          .map((m) => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
-          .join("\n");
-
-        const prompt = `You are a helpful AI assistant for Jackson Rental Homes. Answer questions about their call data.
-
-DATA CONTEXT (Last 4 weeks):
-- Total Calls: ${dataContext?.totalCalls || 0}
-- Daily Average: ${dataContext?.avgDailyCalls || 0} calls/day
-- After-Hours: ${dataContext?.afterHoursCalls || 0} (${dataContext?.afterHoursPercentage || 0}%)
-- Peak Day: ${dataContext?.peakDay?.date || "N/A"} with ${dataContext?.peakDay?.calls || 0} calls
-
-CATEGORIES:
-${dataContext?.categoryBreakdown?.map((c: { category: string; count: number; percentage: number }) => `- ${c.category}: ${c.count} (${c.percentage}%)`).join("\n") || "No data"}
-
-BY DAY OF WEEK:
-${dataContext?.dayOfWeekBreakdown?.map((d: { day: string; total: number; avg: number }) => `- ${d.day}: ${d.total} (avg: ${d.avg}/day)`).join("\n") || "No data"}
-
-${conversationHistory ? `\nCONVERSATION:\n${conversationHistory}\n` : ""}
-
-QUESTION: ${userMessage}
-
-${PRODUCT_CONTEXT_RULES}
-
-TIP: If the user wants visualizations, suggest they say "show me a chart of..." or "create a report...".
-
-Answer concisely (2-3 sentences max).`;
-
-        const response = await ai.models.generateContent({
-          model: "gemini-3-pro-preview",
-          contents: prompt,
+        const response = await generateDataChatResponse({
+          kind: "answer",
+          userMessage,
+          dataContext,
+          messages,
         });
+
+        if (response.kind !== "answer") {
+          throw new Error("Unexpected AI chat response");
+        }
 
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: response.text || "I couldn't generate a response." },
+          { role: "assistant", content: response.content },
         ]);
       }
     } catch (error) {

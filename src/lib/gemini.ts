@@ -1,3 +1,5 @@
+"use server";
+
 import { GoogleGenAI } from "@google/genai";
 
 // Lazy initialization of Gemini client
@@ -5,13 +7,23 @@ let aiClient: GoogleGenAI | null = null;
 
 function getGeminiClient(): GoogleGenAI {
   if (!aiClient) {
-    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error("NEXT_PUBLIC_GEMINI_API_KEY is not set");
+      throw new Error("GEMINI_API_KEY is not set");
     }
     aiClient = new GoogleGenAI({ apiKey });
   }
   return aiClient;
+}
+
+export async function generateGeminiText(prompt: string): Promise<string> {
+  const ai = getGeminiClient();
+  const response = await ai.models.generateContent({
+    model: "gemini-3-pro-preview",
+    contents: prompt,
+  });
+
+  return response.text || "";
 }
 
 export type ReportInsights = {
@@ -69,13 +81,7 @@ DO write about: factual patterns in the data, categories and volumes, timing, le
 Be specific with numbers. Keep insights concise (1 sentence each).`;
 
   try {
-    const ai = getGeminiClient();
-    const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview",
-      contents: prompt,
-    });
-
-    const text = response.text || "";
+    const text = await generateGeminiText(prompt);
 
     // Clean up the response - remove markdown code blocks if present
     let cleanedText = text.trim();

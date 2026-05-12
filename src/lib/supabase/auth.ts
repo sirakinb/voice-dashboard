@@ -1,14 +1,23 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { supabaseServerClient } from "./server";
 
 export async function signInWithEmail(email: string) {
   const supabase = await supabaseServerClient();
-  
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (process.env.NODE_ENV === 'production' 
-    ? 'https://voice-dashboard-snowy.vercel.app' 
-    : 'http://localhost:3000');
+
+  const headerStore = await headers();
+  const host = headerStore.get("x-forwarded-host") ?? headerStore.get("host");
+  const protocol = headerStore.get("x-forwarded-proto") ?? (
+    process.env.NODE_ENV === "production" ? "https" : "http"
+  );
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || (host
+    ? `${protocol}://${host}`
+    : process.env.NODE_ENV === 'production'
+      ? 'https://voice-dashboard-snowy.vercel.app'
+      : 'http://localhost:3000');
   
   const redirectUrl = `${siteUrl}/auth/callback`;
   
