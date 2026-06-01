@@ -1,58 +1,63 @@
-"use server";
+import { GoogleGenAI } from "@google/genai";
+import type {
+  DataChatRequest,
+  DataChatResponse,
+  ReportInsights,
+  ReportInsightsRequest,
+} from "@/lib/gemini-types";
 
-import { generateGeminiText } from "@/lib/gemini";
+const DEFAULT_GEMINI_MODEL = "gemini-3-pro-preview";
 
-type Message = {
-  role: "user" | "assistant";
-  content: string;
-};
+let aiClient: GoogleGenAI | null = null;
 
-type DataContext = {
-  totalCalls?: number;
-  avgDailyCalls?: number;
-  afterHoursCalls?: number;
-  afterHoursPercentage?: number;
-  peakDay?: { date?: string; calls?: number };
-  categoryBreakdown?: Array<{ category: string; count: number; percentage?: number }>;
-  dayOfWeekBreakdown?: Array<{ day: string; total: number; avg?: number }>;
-} | null;
+function getGeminiApiKey(): string {
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not set");
+  }
+  return apiKey;
+}
 
-export type DataChatRequest =
-  | {
-      kind: "chart";
-      userMessage: string;
-      dataContext: DataContext;
-    }
-  | {
-      kind: "draft";
-      draftType: "summary" | "report" | "analysis" | "list";
-      userMessage: string;
-      dataContext: DataContext;
-    }
-  | {
-      kind: "answer";
-      userMessage: string;
-      dataContext: DataContext;
-      messages: Message[];
-    };
+function getGeminiModel(): string {
+  const override = process.env.GEMINI_MODEL?.trim();
+  return override || DEFAULT_GEMINI_MODEL;
+}
 
-export type DataChatResponse =
-  | {
-      kind: "chart";
-      title: string;
-      data: Array<{ label: string; value: number }>;
-    }
-  | {
-      kind: "draft";
-      title: string;
-      content: string;
-    }
-  | {
-      kind: "answer";
-      content: string;
-    };
+function getGeminiClient(): GoogleGenAI {
+  if (!aiClient) {
+    aiClient = new GoogleGenAI({ apiKey: getGeminiApiKey() });
+  }
+  return aiClient;
+}
 
-/** Jackson already uses this app's AI voice agent; never advise replacing or "adding" phone/IVR/staffing. */
+function cleanJsonText(text: string) {
+  let cleanedText = text.trim();
+  if (cleanedText.startsWith("```json")) {
+    cleanedText = cleanedText.slice(7);
+  } else if (cleanedText.startsWith("```")) {
+    cleanedText = cleanedText.slice(3);
+  }
+  if (cleanedText.endsWith("```")) {
+    cleanedText = cleanedText.slice(0, -3);
+  }
+  return cleanedText.trim();
+}
+
+export async function generateGeminiText(prompt: string): Promise<string> {
+  const ai = getGeminiClient();
+  const response = await ai.models.generateContent({
+    model: getGeminiModel(),
+    contents: prompt,
+  });
+
+  const text = response.text?.trim();
+  if (!text) {
+    throw new Error(`Gemini (${getGeminiModel()}) returned an empty response`);
+  }
+
+  return text;
+}
+
 const PRODUCT_CONTEXT_RULES = `
 PRODUCT CONTEXT (non-negotiable):
 Jackson Rental Homes already uses an AI voice agent / intelligent IVR: it answers calls, handles routing, captures leads, and logs activity. This dashboard is the RESULT of that system.
@@ -66,8 +71,64 @@ You MUST NOT recommend or suggest:
 Stay grounded in the numbers and operational follow-up (e.g. leasing team callbacks, maintenance triage), not phone-system projects.
 `.trim();
 
-function cleanJsonText(text: string) {
-  return text.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+export async function generateReportInsights(
+  reportData: ReportInsightsRequest
+): Promise<ReportInsights> {
+  const prompt = `You are an AI analyst for Jackson Rental Homes, a property management company. 
+
+IMPORTANT CONTEXT: Jackson Rental Homes ALREADY HAS an AI voice agent that handles all incoming calls 24/7. This dashboard displays the RESULTS of that AI agent's call handling. The AI agent is already implemented and working - it answers calls, captures leads, handles inquiries, and logs all interactions.
+
+Analyze this weekly call data from the AI voice agent and provide insights.
+
+DATA:
+- Period: ${reportData.periodStart} to ${reportData.periodEnd}
+- Total Calls Handled by AI: ${reportData.totalCalls}
+- Daily Average: ${reportData.avgDailyCalls} calls/day
+- Peak Day: ${reportData.peakDay?.date || "N/A"} with ${reportData.peakDay?.calls || 0} calls
+- After-Hours Calls Captured: ${reportData.afterHoursCalls} (${reportData.afterHoursPercentage}% of total)
+
+CALL CATEGORIES:
+${reportData.categoryBreakdown?.map((c) => `- ${c.category}: ${c.count} calls (${c.percentage}%)`).join("\n") || "No category data"}
+
+CALLS BY DAY OF WEEK:
+${reportData.dayOfWeekBreakdown?.map((d) => `- ${d.day}: ${d.total} calls`).join("\n") || "No day data"}
+
+Please provide your analysis in this exact JSON format (no markdown, just raw JSON):
+{
+  "executiveSummary": "A 2-3 sentence summary of the week's AI agent performance and key takeaway",
+  "keyInsights": ["insight 1", "insight 2", "insight 3", "insight 4", "insight 5"]
+}
+
+OUTPUT RULES — READ CAREFULLY:
+The AI voice agent / intelligent phone system IS this product. It already answers calls around the clock, routes callers, and captures leads. This report is about WHAT HAPPENED in the data, not about acquiring phone technology.
+
+NEVER write or imply recommendations about:
+- Staffing, scheduling, or hiring people to answer phones
+- IVRs, phone trees, auto-attendants, call routing, or "improving the phone system"
+- Being "available 24/7," extending hours, or adding overnight coverage (the AI already handles after-hours)
+- Connecting listings, inventory, CRM, or PMS systems "so callers can get availability" as if that were a missing project — treat that capability as already handled by the product where relevant
+
+DO write about: factual patterns in the data, categories and volumes, timing, lead follow-up by the property team (humans), maintenance urgency, marketing or operational takeaways grounded in numbers.
+
+Be specific with numbers. Keep insights concise (1 sentence each).`;
+
+  const text = await generateGeminiText(prompt);
+  const parsed = JSON.parse(cleanJsonText(text)) as {
+    executiveSummary?: string;
+    keyInsights?: string[];
+  };
+
+  if (!parsed.executiveSummary?.trim()) {
+    throw new Error("Gemini returned report JSON without executiveSummary");
+  }
+  if (!Array.isArray(parsed.keyInsights) || parsed.keyInsights.length === 0) {
+    throw new Error("Gemini returned report JSON without keyInsights");
+  }
+
+  return {
+    executiveSummary: parsed.executiveSummary.trim(),
+    keyInsights: parsed.keyInsights.map((insight) => String(insight).trim()).filter(Boolean),
+  };
 }
 
 export async function generateDataChatResponse(

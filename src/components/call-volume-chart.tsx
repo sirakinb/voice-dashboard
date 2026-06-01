@@ -73,14 +73,14 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
   const getX = (index: number) => padding.left + index * step;
   const getY = (value: number) => padding.top + chartHeight - (value / niceMax) * chartHeight;
 
-  const buildLine = (key: keyof CallVolumeDatum) => {
+  const buildPolylinePoints = (key: keyof CallVolumeDatum) => {
     if (data.length === 0) return "";
     return data
       .map((item, index) => {
         const x = getX(index);
         const value = (item[key] as number) || 0;
         const y = getY(value);
-        return `${index === 0 ? 'M' : 'L'} ${x} ${y}`;
+        return `${x},${y}`;
       })
       .join(" ");
   };
@@ -95,7 +95,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
     `${getX(data.length - 1)},${padding.top + chartHeight}`,
   ].join(" ") : "";
 
-  const linePoints = buildLine("aiHandled");
+  const linePoints = buildPolylinePoints("aiHandled");
 
   const containerHeight = className ?? "h-56";
 
@@ -193,7 +193,7 @@ export function CallVolumeChart({ data, className }: CallVolumeChartProps) {
 
         {/* Total calls line */}
         <polyline
-          points={buildLine("totalCalls")}
+          points={buildPolylinePoints("totalCalls")}
           fill="none"
           stroke="#0D6B5E"
           strokeWidth={2.5}

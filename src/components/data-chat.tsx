@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseBrowserClient } from "@/lib/supabase/client";
-import { generateDataChatResponse } from "@/lib/data-chat-actions";
+import { requestDataChat } from "@/lib/gemini-client";
 import { useCanvas } from "@/lib/canvas-context";
 
 type Message = {
@@ -85,7 +85,7 @@ export function DataChat() {
       const { isDraft, draftType } = detectDraftRequest(userMessage);
 
       if (isChart) {
-        const chartData = await generateDataChatResponse({
+        const chartData = await requestDataChat({
           kind: "chart",
           userMessage,
           dataContext,
@@ -112,7 +112,7 @@ export function DataChat() {
           ]);
         }
       } else if (isDraft) {
-        const draftData = await generateDataChatResponse({
+        const draftData = await requestDataChat({
           kind: "draft",
           draftType,
           userMessage,
@@ -137,7 +137,7 @@ export function DataChat() {
         // Navigate to canvas
         router.push("/canvas");
       } else {
-        const response = await generateDataChatResponse({
+        const response = await requestDataChat({
           kind: "answer",
           userMessage,
           dataContext,

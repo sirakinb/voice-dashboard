@@ -1,0 +1,17 @@
+import { NextResponse } from "next/server";
+
+export const runtime = "nodejs";
+import { generateReportInsights } from "@/lib/gemini-server";
+import type { ReportInsightsRequest } from "@/lib/gemini-types";
+
+export async function POST(request: Request) {
+  try {
+    const body = (await request.json()) as ReportInsightsRequest;
+    const result = await generateReportInsights(body);
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("POST /api/gemini/report-insights error:", error);
+    const message = error instanceof Error ? error.message : "Gemini report insights failed";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}

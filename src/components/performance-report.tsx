@@ -2,7 +2,8 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { supabaseBrowserClient } from "@/lib/supabase/client";
-import { generateReportInsights, type ReportInsights } from "@/lib/gemini";
+import { requestReportInsights } from "@/lib/gemini-client";
+import type { ReportInsights } from "@/lib/gemini-types";
 import { useDemoMode } from "@/lib/demo-context";
 import { demoReportData, demoAIInsights } from "@/lib/demo-data";
 
@@ -98,7 +99,7 @@ export function PerformanceReport() {
     setAiLoading(true);
     setAiError(null);
     try {
-      const insights = await generateReportInsights({
+      const insights = await requestReportInsights({
         periodStart: data.periodStart,
         periodEnd: data.periodEnd,
         totalCalls: data.totalCalls,
