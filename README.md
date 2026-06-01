@@ -8,6 +8,7 @@ Create `.env.local` with the required local secrets:
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 GEMINI_API_KEY=
+# Optional: GEMINI_MODEL=gemini-3-pro-preview (or a newer model id when upgrading)
 ```
 
 First, run the development server:

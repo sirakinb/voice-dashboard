@@ -103,17 +103,23 @@ Respond with ONLY valid JSON in this format (no markdown, no explanation):
 }`;
 
     const text = await generateGeminiText(chartPrompt);
+    const chartData = JSON.parse(cleanJsonText(text)) as {
+      title?: string;
+      data?: Array<{ label: string; value: number }>;
+    };
 
-    try {
-      const chartData = JSON.parse(cleanJsonText(text));
-      return {
-        kind: "chart",
-        title: chartData.title || "Call Data",
-        data: Array.isArray(chartData.data) ? chartData.data : [],
-      };
-    } catch {
-      return { kind: "chart", title: "Call Data", data: [] };
+    if (!chartData.title?.trim()) {
+      throw new Error("Gemini returned chart JSON without title");
     }
+    if (!Array.isArray(chartData.data) || chartData.data.length === 0) {
+      throw new Error("Gemini returned chart JSON without data");
+    }
+
+    return {
+      kind: "chart",
+      title: chartData.title.trim(),
+      data: chartData.data,
+    };
   }
 
   if (request.kind === "draft") {
@@ -143,21 +149,23 @@ Respond with ONLY valid JSON (no markdown):
 }`;
 
     const text = await generateGeminiText(draftPrompt);
+    const draftData = JSON.parse(cleanJsonText(text)) as {
+      title?: string;
+      content?: string;
+    };
 
-    try {
-      const draftData = JSON.parse(cleanJsonText(text));
-      return {
-        kind: "draft",
-        title: draftData.title || "Draft",
-        content: draftData.content || "No content generated.",
-      };
-    } catch {
-      return {
-        kind: "draft",
-        title: "Draft",
-        content: text || "Could not generate content.",
-      };
+    if (!draftData.title?.trim()) {
+      throw new Error("Gemini returned draft JSON without title");
     }
+    if (!draftData.content?.trim()) {
+      throw new Error("Gemini returned draft JSON without content");
+    }
+
+    return {
+      kind: "draft",
+      title: draftData.title.trim(),
+      content: draftData.content.trim(),
+    };
   }
 
   const conversationHistory = request.messages
@@ -193,6 +201,6 @@ Answer concisely (2-3 sentences max).`;
 
   return {
     kind: "answer",
-    content: text || "I couldn't generate a response.",
+    content: text,
   };
 }

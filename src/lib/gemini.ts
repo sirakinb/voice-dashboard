@@ -2,16 +2,27 @@
 
 import { GoogleGenAI } from "@google/genai";
 
-// Lazy initialization of Gemini client
+/** Primary model for all Gemini calls. Override only with GEMINI_MODEL when upgrading. */
+const DEFAULT_GEMINI_MODEL = "gemini-3-pro-preview";
+
 let aiClient: GoogleGenAI | null = null;
+
+function getGeminiApiKey(): string {
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not set");
+  }
+  return apiKey;
+}
+
+function getGeminiModel(): string {
+  const override = process.env.GEMINI_MODEL?.trim();
+  return override || DEFAULT_GEMINI_MODEL;
+}
 
 function getGeminiClient(): GoogleGenAI {
   if (!aiClient) {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      throw new Error("GEMINI_API_KEY is not set");
-    }
-    aiClient = new GoogleGenAI({ apiKey });
+    aiClient = new GoogleGenAI({ apiKey: getGeminiApiKey() });
   }
   return aiClient;
 }
@@ -19,17 +30,35 @@ function getGeminiClient(): GoogleGenAI {
 export async function generateGeminiText(prompt: string): Promise<string> {
   const ai = getGeminiClient();
   const response = await ai.models.generateContent({
-    model: "gemini-3-pro-preview",
+    model: getGeminiModel(),
     contents: prompt,
   });
 
-  return response.text || "";
+  const text = response.text?.trim();
+  if (!text) {
+    throw new Error(`Gemini (${getGeminiModel()}) returned an empty response`);
+  }
+
+  return text;
 }
 
 export type ReportInsights = {
   executiveSummary: string;
   keyInsights: string[];
 };
+
+function cleanJsonText(text: string) {
+  let cleanedText = text.trim();
+  if (cleanedText.startsWith("```json")) {
+    cleanedText = cleanedText.slice(7);
+  } else if (cleanedText.startsWith("```")) {
+    cleanedText = cleanedText.slice(3);
+  }
+  if (cleanedText.endsWith("```")) {
+    cleanedText = cleanedText.slice(0, -3);
+  }
+  return cleanedText.trim();
+}
 
 export async function generateReportInsights(reportData: {
   periodStart: string;
@@ -80,38 +109,21 @@ DO write about: factual patterns in the data, categories and volumes, timing, le
 
 Be specific with numbers. Keep insights concise (1 sentence each).`;
 
-  try {
-    const text = await generateGeminiText(prompt);
+  const text = await generateGeminiText(prompt);
+  const parsed = JSON.parse(cleanJsonText(text)) as {
+    executiveSummary?: string;
+    keyInsights?: string[];
+  };
 
-    // Clean up the response - remove markdown code blocks if present
-    let cleanedText = text.trim();
-    if (cleanedText.startsWith("```json")) {
-      cleanedText = cleanedText.slice(7);
-    } else if (cleanedText.startsWith("```")) {
-      cleanedText = cleanedText.slice(3);
-    }
-    if (cleanedText.endsWith("```")) {
-      cleanedText = cleanedText.slice(0, -3);
-    }
-    cleanedText = cleanedText.trim();
-
-    const parsed = JSON.parse(cleanedText);
-
-    return {
-      executiveSummary: parsed.executiveSummary || "Report analysis unavailable.",
-      keyInsights: parsed.keyInsights || [],
-    };
-  } catch (error) {
-    console.error("Gemini API error:", error);
-    // Return fallback insights if AI fails
-    return {
-      executiveSummary: `Your AI voice agent handled ${reportData.totalCalls} calls this week with an average of ${reportData.avgDailyCalls} calls per day. ${reportData.afterHoursCalls} calls (${reportData.afterHoursPercentage}%) occurred in after-hours windows.`,
-      keyInsights: [
-        `${reportData.categoryBreakdown?.[0]?.category || 'Primary category'} inquiries represent ${reportData.categoryBreakdown?.[0]?.percentage || 0}% of all calls`,
-        `After-hours calls account for ${reportData.afterHoursPercentage}% of total volume`,
-        `Peak activity occurred on ${reportData.peakDay?.date || 'N/A'} with ${reportData.peakDay?.calls || 0} calls`,
-      ],
-    };
+  if (!parsed.executiveSummary?.trim()) {
+    throw new Error("Gemini returned report JSON without executiveSummary");
   }
-}
+  if (!Array.isArray(parsed.keyInsights) || parsed.keyInsights.length === 0) {
+    throw new Error("Gemini returned report JSON without keyInsights");
+  }
 
+  return {
+    executiveSummary: parsed.executiveSummary.trim(),
+    keyInsights: parsed.keyInsights.map((insight) => String(insight).trim()).filter(Boolean),
+  };
+}

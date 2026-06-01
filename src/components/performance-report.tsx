@@ -50,6 +50,7 @@ export function PerformanceReport() {
   const [aiInsights, setAiInsights] = useState<ReportInsights | null>(null);
   const [loading, setLoading] = useState(true);
   const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Fetch available weeks on mount
@@ -95,6 +96,7 @@ export function PerformanceReport() {
   // Generate AI insights
   const generateInsights = useCallback(async (data: ReportData) => {
     setAiLoading(true);
+    setAiError(null);
     try {
       const insights = await generateReportInsights({
         periodStart: data.periodStart,
@@ -110,7 +112,10 @@ export function PerformanceReport() {
       setAiInsights(insights);
     } catch (err) {
       console.error("Error generating AI insights:", err);
-      // Fallback handled in gemini.ts
+      setAiInsights(null);
+      setAiError(
+        err instanceof Error ? err.message : "Failed to generate AI insights."
+      );
     } finally {
       setAiLoading(false);
     }
@@ -129,11 +134,13 @@ export function PerformanceReport() {
       setLoading(true);
       setError(null);
       setAiInsights(null);
+      setAiError(null);
 
       // Use demo data if in demo mode
       if (isDemoMode) {
         setReport(demoReportData);
         setAiInsights(demoAIInsights);
+        setAiError(null);
         setLoading(false);
         return;
       }
@@ -297,10 +304,11 @@ export function PerformanceReport() {
         </div>
         {aiLoading ? (
           <div className="mt-4 h-16 animate-pulse rounded-lg bg-jackson-cream-dark" />
+        ) : aiError ? (
+          <p className="mt-4 text-sm text-rose-600">{aiError}</p>
         ) : (
           <p className="mt-4 text-sm leading-relaxed text-jackson-charcoal">
-            {aiInsights?.executiveSummary ||
-              `Your AI voice agent handled ${report.totalCalls.toLocaleString()} calls this week.`}
+            {aiInsights?.executiveSummary}
           </p>
         )}
       </section>
@@ -392,9 +400,11 @@ export function PerformanceReport() {
               <div key={i} className="h-8 animate-pulse rounded-lg bg-jackson-cream-dark" />
             ))}
           </div>
+        ) : aiError ? (
+          <p className="mt-4 text-sm text-rose-600">{aiError}</p>
         ) : (
           <ul className="mt-4 space-y-3">
-            {(aiInsights?.keyInsights || []).map((insight, index) => (
+            {(aiInsights?.keyInsights ?? []).map((insight, index) => (
               <li key={index} className="flex items-start gap-3">
                 <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-jackson-green/10 text-xs font-medium text-jackson-green">
                   {index + 1}

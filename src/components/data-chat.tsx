@@ -155,10 +155,13 @@ export function DataChat() {
       }
     } catch (error) {
       console.error("Chat error:", error);
-      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. If this persists, confirm GEMINI_API_KEY is set in Vercel and redeploy.";
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: `Error: ${errorMessage}` },
+        { role: "assistant", content: errorMessage },
       ]);
     } finally {
       setIsLoading(false);
