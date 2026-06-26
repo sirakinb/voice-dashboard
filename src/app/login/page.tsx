@@ -3,14 +3,28 @@
 import Image from "next/image";
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { signInWithEmail } from "@/lib/supabase/auth";
+import { signInWithEmail } from "@/lib/supabase/client-auth";
+
+function loginErrorMessage(errorCode: string | null): string | null {
+  if (!errorCode) return null;
+
+  switch (errorCode) {
+    case "otp_expired":
+      return "That sign-in link expired. Magic links are single-use and time-limited — enter your email below to get a fresh one.";
+    case "auth_error":
+      return "Sign-in failed. Please request a new link and try again.";
+    default:
+      return "Authentication failed. Please request a new sign-in link.";
+  }
+}
 
 function LoginForm() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const initialError = loginErrorMessage(searchParams.get("error"));
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(
-    searchParams.get("error") ? { type: "error", text: "Authentication failed. Please try again." } : null
+    initialError ? { type: "error", text: initialError } : null
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -26,7 +40,9 @@ function LoginForm() {
       if (result.error) {
         setMessage({
           type: "error",
-          text: result.error,
+          text: result.error.includes("rate limit")
+            ? "Too many sign-in emails sent. Wait a few minutes, then try again."
+            : result.error,
         });
       } else {
         setMessage({
@@ -63,7 +79,7 @@ function LoginForm() {
           Sign in to your account
         </h2>
         <p className="mt-2 text-sm text-jackson-text-muted">
-          Enter your email to receive a sign-in link
+          Enter your email to receive a sign-in link. Links expire after about an hour.
         </p>
       </div>
 
